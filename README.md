@@ -61,15 +61,22 @@ Il y aura :
 ```
 
 ## GitFlow
-- La branche `main` contient le code stable et déployable
-- La branche `dev` est utilisée pour le développement quotidien et provient de la branche `main`
-- La branche `docs` est utilisée pour la documentation du projet et provient de la branche `main`
+- La branche `stable` contient le code stable et déployable
+- La branche `dev` est utilisée pour le développement quotidien et provient de la branche `stable`
+- La branche `docs` est utilisée pour la documentation du projet et provient de la branche `stable`
 - La branche `client` est utilisée pour le développement du client React et provient de la branche `dev`
 - La branche `server` est utilisée pour le développement de l'API ASP.NET Core et provient de la branche `dev`
 - La branche `agents` est utilisée pour le développement des scripts Python et provient de la branche `dev`
 - Les branches de fonctionnalités (feature branches) sont créées à partir des branches `client`, `server` ou `agents` selon le type de fonctionnalité à développer. Une fois la fonctionnalité terminée, elle est fusionnée dans la branche correspondante.
 
 ```mermaid
+---
+config:
+    theme: base
+    gitGraph:
+        showCommitLabel: true
+        mainBranchName: "stable"
+---
 gitGraph
     commit id: "Initial commit"
     branch dev
@@ -90,8 +97,8 @@ gitGraph
     commit id: "Create data simulation scripts"
     checkout dev
     merge agents id: "Merge agents feature"
-    checkout main
-    merge dev id: "Merge dev into main for release"
+    checkout stable
+    merge dev id: "Merge dev into stable for release"
 ```
 
 ## Auteurs
