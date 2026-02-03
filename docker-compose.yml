@@ -37,39 +37,39 @@ services:
       - dashboard-network
 
   # API Backend ASP.NET Core avec SignalR
-  # backend:
-  #   build:
-  #     context: ./server
-  #     dockerfile: Dockerfile
-  #   container_name: production-dashboard-api
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_URLS=http://+:5000
-  #     - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
-  #   ports:
-  #     - "5000:5000"
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   networks:
-  #     - dashboard-network
-  #   restart: unless-stopped
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: production-dashboard-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
+    ports:
+      - "5050:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - dashboard-network
+    restart: unless-stopped
 
   # Frontend React
-  # frontend:
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile
-  #   container_name: production-dashboard-client
-  #   environment:
-  #     - VITE_API_URL=http://localhost:5000
-  #   ports:
-  #     - "5173:5173"
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - dashboard-network
-  #   restart: unless-stopped
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: production-dashboard-client
+    environment:
+      - VITE_API_URL=http://localhost:5050
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - dashboard-network
+    restart: unless-stopped
 
   # Agents Python de simulation
   # agents:
