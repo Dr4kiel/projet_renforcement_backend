@@ -56,20 +56,20 @@ services:
     restart: unless-stopped
 
   # Frontend React
-  # frontend:
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile
-  #   container_name: production-dashboard-client
-  #   environment:
-  #     - VITE_API_URL=http://localhost:5000
-  #   ports:
-  #     - "5173:5173"
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - dashboard-network
-  #   restart: unless-stopped
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: production-dashboard-client
+    environment:
+      - VITE_API_URL=http://localhost:5000
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - dashboard-network
+    restart: unless-stopped
 
   # Agents Python de simulation
   # agents:
