@@ -47,7 +47,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
     ports:
-      - "5000:8080"
+      - "5050:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -62,7 +62,7 @@ services:
       dockerfile: Dockerfile
     container_name: production-dashboard-client
     environment:
-      - VITE_API_URL=http://localhost:5000
+      - VITE_API_URL=http://localhost:5050
     ports:
       - "3000:80"
     depends_on:
