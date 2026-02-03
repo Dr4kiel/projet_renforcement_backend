@@ -37,23 +37,23 @@ services:
       - dashboard-network
 
   # API Backend ASP.NET Core avec SignalR
-  # backend:
-  #   build:
-  #     context: ./server
-  #     dockerfile: Dockerfile
-  #   container_name: production-dashboard-api
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_URLS=http://+:5000
-  #     - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
-  #   ports:
-  #     - "5000:5000"
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   networks:
-  #     - dashboard-network
-  #   restart: unless-stopped
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: production-dashboard-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
+    ports:
+      - "5000:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - dashboard-network
+    restart: unless-stopped
 
   # Frontend React
   # frontend:
