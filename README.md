@@ -57,7 +57,68 @@ Il y aura :
 - Une table Historian pour stocker les données des capteurs (id, tag_name, timestamp, value)
 
 ```mermaid
-
+erDiagram
+    Users {
+        int id PK
+        varchar identifiant
+        varchar password
+        varchar email
+        timestamp created_at
+        int role FK
+    }
+    
+    Roles {
+        int id PK
+        varchar name
+    }
+    
+    Lines {
+        int id PK
+        varchar name
+        boolean is_changement
+        int temps_changement
+        int equipment FK
+        int of_suivant FK
+        int of_en_cours FK
+    }
+    
+    Equipments {
+        int id PK
+        varchar name
+    }
+    
+    ofs {
+        int id PK
+        varchar of_
+        varchar produit
+        int qte_produite
+        int qte_totale
+    }
+    
+    Tags {
+        int id PK
+        varchar tag_name
+    }
+    
+    Historian {
+        int id PK
+        timestamp timestamp_
+        numeric value_
+        int tag_name FK
+    }
+    
+    Equipment_Tag {
+        int equipment FK
+        int tag_name FK
+    }
+    
+    Users ||--o{ Roles : "has role"
+    Lines ||--|| Equipments : "uses equipment"
+    Lines ||--o| ofs : "current OF"
+    Lines ||--o| ofs : "next OF"
+    Tags ||--o{ Historian : "stores values"
+    Equipments ||--o{ Equipment_Tag : "has tags"
+    Tags ||--o{ Equipment_Tag : "belongs to equipment"
 ```
 
 ## GitFlow
