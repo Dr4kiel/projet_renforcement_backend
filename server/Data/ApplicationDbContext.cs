@@ -160,14 +160,14 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Users");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .ValueGeneratedNever();
+                .UseIdentityAlwaysColumn();
             entity.Property(e => e.Identifiant)
                 .IsRequired()
                 .HasMaxLength(50)
                 .HasColumnName("identifiant");
             entity.Property(e => e.Password)
                 .IsRequired()
-                .HasMaxLength(50)
+                .HasMaxLength(255)
                 .HasColumnName("password");
             entity.Property(e => e.Email)
                 .IsRequired()
