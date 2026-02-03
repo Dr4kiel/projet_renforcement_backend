@@ -53,7 +53,8 @@ public class UserService : IUserService
             Password = hashedPassword,
             Email = request.Email,
             RoleId = request.RoleId,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
         var createdUser = await _userRepository.CreateAsync(user);
@@ -90,6 +91,7 @@ public class UserService : IUserService
             user.RoleId = request.RoleId;
         }
 
+        user.UpdatedAt = DateTime.UtcNow;
         await _userRepository.UpdateAsync(user);
         var updatedUser = await _userRepository.GetByIdWithRoleAsync(id);
         return MapToDto(updatedUser!);
@@ -111,6 +113,7 @@ public class UserService : IUserService
 
         // Hash and update password
         user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        user.UpdatedAt = DateTime.UtcNow;
         await _userRepository.UpdateAsync(user);
         return true;
     }
@@ -123,6 +126,7 @@ public class UserService : IUserService
             Identifiant = user.Identifiant,
             Email = user.Email,
             CreatedAt = user.CreatedAt,
+            UpdatedAt = user.UpdatedAt,
             RoleId = user.RoleId,
             RoleName = user.Role?.Name
         };

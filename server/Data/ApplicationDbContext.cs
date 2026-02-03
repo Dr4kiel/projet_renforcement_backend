@@ -28,9 +28,11 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Roles");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .UseIdentityAlwaysColumn();
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("role_id");
             entity.Property(e => e.Name)
-                .HasMaxLength(50);
+                .HasMaxLength(50)
+                .HasColumnName("name");
         });
 
         // Configure Equipment
@@ -39,10 +41,12 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Equipments");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .UseIdentityAlwaysColumn();
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("equipment_id");
             entity.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(50)
+                .HasColumnName("name");
         });
 
         // Configure Tag
@@ -51,7 +55,8 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Tags");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .UseIdentityAlwaysColumn();
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("tag_id");
             entity.Property(e => e.TagName)
                 .IsRequired()
                 .HasMaxLength(50)
@@ -64,11 +69,12 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("ofs");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .UseIdentityAlwaysColumn();
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("of_id");
             entity.Property(e => e.Of_)
                 .IsRequired()
                 .HasMaxLength(50)
-                .HasColumnName("of_");
+                .HasColumnName("of_name");
             entity.Property(e => e.Produit)
                 .IsRequired()
                 .HasMaxLength(50)
@@ -87,14 +93,15 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Historian");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .UseIdentityAlwaysColumn();
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("historian_id");
             entity.Property(e => e.Timestamp)
                 .IsRequired()
-                .HasColumnName("timestamp_");
+                .HasColumnName("timestamp");
             entity.Property(e => e.Value)
                 .IsRequired()
                 .HasPrecision(15, 2)
-                .HasColumnName("value_");
+                .HasColumnName("value");
             entity.Property(e => e.TagNameId)
                 .IsRequired()
                 .HasColumnName("tag_name");
@@ -112,7 +119,8 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Lines");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .UseIdentityAlwaysColumn();
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("line_id");
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50)
@@ -160,7 +168,8 @@ public class ApplicationDbContext : DbContext
             entity.ToTable("Users");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
-                .UseIdentityAlwaysColumn();
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("user_id");
             entity.Property(e => e.Identifiant)
                 .IsRequired()
                 .HasMaxLength(50)
@@ -176,6 +185,9 @@ public class ApplicationDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .IsRequired()
                 .HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt)
+                .IsRequired()
+                .HasColumnName("updated_at");
             entity.Property(e => e.RoleId)
                 .HasColumnName("role");
 
