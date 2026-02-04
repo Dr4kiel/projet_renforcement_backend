@@ -196,6 +196,10 @@ public class ApplicationDbContext : DbContext
                 .HasForeignKey(u => u.RoleId)
                 .HasConstraintName("users_role_fkey")
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(e => e.Identifiant)
+                .IsUnique()
+                .HasDatabaseName("users_identifiant_key");
         });
 
         // Configure Equipment_Tag many-to-many relationship
