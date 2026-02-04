@@ -17,6 +17,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // ========== SERVICES CONFIGURATION ==========
 
+// Configure routing with lowercase URLs
+builder.Services.AddRouting(options =>
+{
+    options.LowercaseUrls = true;
+    options.LowercaseQueryStrings = true;
+});
+
 // Add Controllers with custom validation error response
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -56,11 +63,19 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ILineRepository, LineRepository>();
+builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+builder.Services.AddScoped<IOfRepository, OfRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 // Register Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ILineService, LineService>();
+builder.Services.AddScoped<IOfService, OfService>();
+builder.Services.AddScoped<IEquipmentService, EquipmentService>();
+builder.Services.AddScoped<ITagService, TagService>();
 
 // JWT Authentication Configuration
 var jwtSecretKey = builder.Configuration["Jwt:SecretKey"]
@@ -133,7 +148,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Production Dashboard API",
         Version = "v1",
-        Description = "ASP.NET Core API for real-time production monitoring",
+        Description = "ASP.NET Core API for real-time production back-office",
         Contact = new OpenApiContact
         {
             Name = "Cyprien.G & Tristan.G"
@@ -170,6 +185,27 @@ builder.Services.AddSwaggerGen(options =>
 // ========== MIDDLEWARE PIPELINE ==========
 
 var app = builder.Build();
+
+// Apply database migrations automatically on startup
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        var logger = services.GetRequiredService<ILogger<Program>>();
+
+        logger.LogInformation("Applying database migrations...");
+        context.Database.Migrate();
+        logger.LogInformation("Database migrations applied successfully.");
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+        throw;
+    }
+}
 
 // Global Exception Handling
 app.UseMiddleware<ExceptionHandlerMiddleware>();
