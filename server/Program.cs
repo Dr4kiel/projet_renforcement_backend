@@ -1,10 +1,12 @@
 using System.Text;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using server.Data;
+using server.DTOs.Common;
 using server.Middleware;
 using server.Repositories;
 using server.Repositories.Interfaces;
@@ -15,8 +17,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 // ========== SERVICES CONFIGURATION ==========
 
-// Add Controllers
-builder.Services.AddControllers();
+// Add Controllers with custom validation error response
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(e => e.Value?.Errors.Count > 0)
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+
+            var response = ApiErrorResponse.BadRequest("Validation failed", errors);
+            return new BadRequestObjectResult(response);
+        };
+    });
 
 // API Versioning Configuration
 builder.Services.AddApiVersioning(options =>
@@ -68,6 +85,26 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtAudience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
         ClockSkew = TimeSpan.Zero
+    };
+
+    // Return JSON responses for authentication errors
+    options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+    {
+        OnChallenge = async context =>
+        {
+            context.HandleResponse();
+            context.Response.StatusCode = 401;
+            context.Response.ContentType = "application/json";
+            var response = ApiErrorResponse.Unauthorized("Authentication required. Please provide a valid token.");
+            await context.Response.WriteAsJsonAsync(response);
+        },
+        OnForbidden = async context =>
+        {
+            context.Response.StatusCode = 403;
+            context.Response.ContentType = "application/json";
+            var response = ApiErrorResponse.Forbidden("You do not have permission to access this resource.");
+            await context.Response.WriteAsJsonAsync(response);
+        }
     };
 });
 
