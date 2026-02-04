@@ -59,6 +59,7 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<ILineRepository, LineRepository>();
 builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddScoped<IOfRepository, OfRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 // Register Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -66,6 +67,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILineService, LineService>();
 builder.Services.AddScoped<IOfService, OfService>();
+builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 
 // JWT Authentication Configuration
 var jwtSecretKey = builder.Configuration["Jwt:SecretKey"]
