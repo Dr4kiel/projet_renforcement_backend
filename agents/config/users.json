@@ -2,7 +2,7 @@
   {
     "id": 1,
     "identifiant": "admin",
-    "password": "admin123",
+    "password": "$2y$10$MbX1v.5bL7oqznoNa6lHnOVsUzbP711qLynRtSrjZQf8O0HVkMYiS",
     "email": "admin@production.com",
     "created_at": "2024-01-01T00:00:00",
     "role": 1
@@ -10,7 +10,7 @@
   {
     "id": 2,
     "identifiant": "operator1",
-    "password": "operator123",
+    "password": "$2y$10$rBd2iQ1/QcpC6JK7Iqx2EueVon5sUW6Rc/QSIDAotLQAxFUQSdzGK",
     "email": "operator1@production.com",
     "created_at": "2024-01-01T00:00:00",
     "role": 2
