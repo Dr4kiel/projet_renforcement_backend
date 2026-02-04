@@ -43,7 +43,7 @@ services:
       dockerfile: Dockerfile
     container_name: production-dashboard-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
     ports:
