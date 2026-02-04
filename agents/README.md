@@ -6,23 +6,24 @@ Ce dossier contient les scripts Python pour remplir automatiquement la base de d
 
 ```
 agents/
-├── seed_data.py          # Script principal d'insertion
-├── requirements.txt      # Dépendances Python
-├── Dockerfile           # Dockerfile pour containerisation
-└── config/              # Fichiers JSON de configuration
-    ├── roles.json
-    ├── users.json
-    ├── equipments.json
-    ├── tags.json
-    ├── ofs.json
-    ├── lines.json
-    ├── historian.json
-    └── equipment_tags.json
+├── seed_generation/          # Dossier de génération de données
+│   ├── seed_data.py         # Script principal d'insertion
+│   └── config/              # Fichiers JSON de configuration
+│       ├── roles.json
+│       ├── users.json
+│       ├── equipments.json
+│       ├── tags.json
+│       ├── ofs.json
+│       ├── lines.json
+│       ├── historian.json
+│       └── equipment_tags.json
+├── requirements.txt         # Dépendances Python
+└── Dockerfile              # Dockerfile pour containerisation
 ```
 
 ## Configuration des Données
 
-Modifiez les fichiers JSON dans le dossier `config/` pour définir les données à insérer :
+Modifiez les fichiers JSON dans le dossier `seed_generation/config/` pour définir les données à insérer :
 
 ### 1. **roles.json** - Rôles utilisateurs
 ```json
@@ -150,7 +151,7 @@ export DB_USER=postgres
 export DB_PASSWORD=postgres
 
 # Exécuter le script
-python seed_data.py
+python seed_generation/seed_data.py
 ```
 
 ## Variables d'Environnement

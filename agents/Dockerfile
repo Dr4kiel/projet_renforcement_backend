@@ -8,12 +8,11 @@ COPY requirements.txt .
 # Installer les dépendances
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copier le script et les fichiers de config
-COPY seed_data.py .
-COPY config/ ./config/
+# Copier tout le dossier seed_generation avec ses fichiers
+COPY seed_generation/ ./seed_generation/
 
 # Rendre le script exécutable
-RUN chmod +x seed_data.py
+RUN chmod +x seed_generation/seed_data.py
 
 # Exécuter le script
-CMD ["python", "seed_data.py"]
+CMD ["python", "seed_generation/seed_data.py"]
