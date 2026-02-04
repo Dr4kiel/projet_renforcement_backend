@@ -69,7 +69,7 @@ def insert_roles(cursor, roles_data):
             )
             # Récupérer l'id du rôle
             cursor.execute(
-                'SELECT id FROM "Roles" WHERE name = %s',
+                'SELECT role_id FROM "Roles" WHERE name = %s',
                 (role_name,)
             )
             result = cursor.fetchone()
@@ -97,10 +97,9 @@ def insert_users(cursor, users_data, role_id_mapping):
                 continue
 
             cursor.execute(
-                '''INSERT INTO "Users" (id, identifiant, password, email, created_at, role)
-                   VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING''',
+                '''INSERT INTO "Users" (identifiant, password, email, created_at, role)
+                   VALUES (%s, %s, %s, %s, %s) ON CONFLICT DO NOTHING''',
                 (
-                    user.get('id'),
                     user.get('identifiant'),
                     user.get('password'),
                     user.get('email'),
@@ -129,7 +128,7 @@ def insert_equipments(cursor, equipments_data):
             )
             # Récupérer l'id de l'équipement
             cursor.execute(
-                'SELECT id FROM "Equipments" WHERE name = %s',
+                'SELECT equipment_id FROM "Equipments" WHERE name = %s',
                 (equipment_name,)
             )
             result = cursor.fetchone()
@@ -158,7 +157,7 @@ def insert_tags(cursor, tags_data):
             )
             # Récupérer l'id du tag
             cursor.execute(
-                'SELECT id FROM "Tags" WHERE tag_name = %s',
+                'SELECT tag_id FROM "Tags" WHERE tag_name = %s',
                 (tag_name,)
             )
             result = cursor.fetchone()
@@ -193,7 +192,7 @@ def insert_ofs(cursor, ofs_data):
             )
             # Récupérer l'id de l'OF
             cursor.execute(
-                'SELECT id FROM ofs WHERE of_name = %s',
+                'SELECT of_id FROM ofs WHERE of_name = %s',
                 (of_name,)
             )
             result = cursor.fetchone()
