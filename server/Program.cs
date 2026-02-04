@@ -65,6 +65,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILineService, LineService>();
+builder.Services.AddScoped<IOfService, OfService>();
 
 // JWT Authentication Configuration
 var jwtSecretKey = builder.Configuration["Jwt:SecretKey"]
@@ -137,7 +138,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Production Dashboard API",
         Version = "v1",
-        Description = "ASP.NET Core API for real-time production monitoring",
+        Description = "ASP.NET Core API for real-time production back-office",
         Contact = new OpenApiContact
         {
             Name = "Cyprien.G & Tristan.G"
