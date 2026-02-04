@@ -1,7 +1,6 @@
 import api from './api';
 import {
   type LoginCredentials,
-  type RegisterCredentials,
   type ForgotPasswordRequest,
   type ResetPasswordRequest,
   type AuthResponse,
@@ -12,13 +11,7 @@ import {
 class AuthService {
   // POST /api/v1/Auth/login
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await api.post<AuthResponse>('/api/v1/Auth/login', credentials);
-    return response.data;
-  }
-
-  // POST /api/v1/Users (création d'utilisateur - équivalent register)
-  async register(credentials: RegisterCredentials): Promise<UserInfo> {
-    const response = await api.post<UserInfo>('/api/v1/Users', credentials);
+    const response = await api.post<AuthResponse>('/api/v1/auth/login', credentials);
     return response.data;
   }
 
@@ -27,14 +20,12 @@ class AuthService {
     await api.post(`/api/v1/Users/${userId}/change-password`, request);
   }
 
-  // TODO: Endpoint à implémenter - POST /api/auth/forgot-password
   async forgotPassword(request: ForgotPasswordRequest): Promise<void> {
     console.log('Forgot password - pas encore implémenté', request);
     // Une fois implémenté, décommenter :
     // await api.post('/api/auth/forgot-password', request);
   }
 
-  // TODO: Endpoint à implémenter - POST /api/auth/reset-password
   async resetPassword(request: ResetPasswordRequest): Promise<void> {
     console.log('Reset password - pas encore implémenté', request);
     // Une fois implémenté, décommenter :

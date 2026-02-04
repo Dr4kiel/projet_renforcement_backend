@@ -26,7 +26,6 @@ export const LoginPage = () => {
 
     try {
       await login({ identifiant, password });
-      // La redirection est gérée dans le Context
     } catch (err) {
       setError('Identifiant ou mot de passe incorrect');
       console.error('Erreur de connexion:', err);
@@ -56,7 +55,7 @@ export const LoginPage = () => {
               label="Identifiant"
               value={identifiant}
               onChange={(e) => setIdentifiant(e.target.value)}
-              placeholder="votre_identifiant"
+              placeholder="Identifiant"
               disabled={isLoading}
               required
             />
@@ -84,18 +83,6 @@ export const LoginPage = () => {
               Se connecter
             </Button>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Pas encore de compte ?{' '}
-              <Link
-                to="/register"
-                className="font-medium text-blue-600 hover:text-blue-500"
-              >
-                S'inscrire
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
     </div>

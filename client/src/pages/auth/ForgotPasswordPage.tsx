@@ -7,7 +7,7 @@ import { ErrorMessage } from '../../components/ui/ErrorMessage';
 import { SuccessMessage } from '../../components/ui/SuccessMessage';
 
 export const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState('');
+  const [login, setLogin] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,23 +17,14 @@ export const ForgotPasswordPage = () => {
     setError('');
     setSuccess(false);
 
-    // Validation
-    if (!email) {
-      setError('Veuillez entrer votre adresse email');
+    if (!login) {
+      setError('Veuillez entrer votre identifiant');
       return;
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError('Adresse email invalide');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      // TODO: Endpoint à implémenter côté backend
-      await authService.forgotPassword({ email });
+      await authService.forgotPassword({ identifiant: login });
       setSuccess(true);
     } catch (err) {
       setError('Une erreur est survenue. Veuillez réessayer.');
@@ -51,7 +42,7 @@ export const ForgotPasswordPage = () => {
             Mot de passe oublié
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Entrez votre email pour réinitialiser votre mot de passe
+            Entrez votre identifiant pour réinitialiser votre mot de passe
           </p>
         </div>
 
@@ -80,11 +71,11 @@ export const ForgotPasswordPage = () => {
               {error && <ErrorMessage message={error} />}
 
               <Input
-                type="email"
-                label="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="votreemail@exemple.com"
+                type="identifiant"
+                label="Identifiant"
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
+                placeholder="Identifiant"
                 disabled={isLoading}
                 required
               />

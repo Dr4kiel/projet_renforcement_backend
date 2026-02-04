@@ -8,7 +8,6 @@ const api = axios.create({
   },
 });
 
-// Request interceptor: Ajouter le token JWT à chaque requête
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('accessToken');
@@ -26,9 +25,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    // Si erreur 401, déconnecter l'utilisateur
     if (error.response?.status === 401) {
-      // Vérifier si on n'est pas déjà sur la page de login
       if (!window.location.pathname.includes('/login')) {
         localStorage.clear();
         window.location.href = '/login';

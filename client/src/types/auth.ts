@@ -5,13 +5,6 @@ export interface LoginCredentials {
   password: string;
 }
 
-export interface RegisterCredentials {
-  identifiant: string;
-  email: string;
-  password: string;
-  roleId?: number;
-}
-
 export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
@@ -33,7 +26,7 @@ export interface AuthResponse {
 
 // Pour compatibilité (endpoints non implémentés dans le backend)
 export interface ForgotPasswordRequest {
-  email: string;
+  identifiant: string;
 }
 
 export interface ResetPasswordRequest {
@@ -47,7 +40,6 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
-  register: (credentials: RegisterCredentials) => Promise<void>;
   logout: () => void;
 }
 

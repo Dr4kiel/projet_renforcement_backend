@@ -4,7 +4,6 @@ import authService from '../services/authService';
 import {
   type AuthContextType,
   type LoginCredentials,
-  type RegisterCredentials,
   type UserInfo,
 } from '../types/auth';
 
@@ -22,10 +21,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Computed property
   const isAuthenticated = !!user;
 
-  // Charger le user depuis localStorage au montage
   useEffect(() => {
     const loadUser = () => {
       try {
@@ -46,19 +43,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     loadUser();
   }, []);
 
-  // Login
   const login = async (credentials: LoginCredentials): Promise<void> => {
     setIsLoading(true);
     try {
-      // POST /api/v1/Auth/login
       const response = await authService.login(credentials);
 
-      // Sauvegarder token et user
       authService.saveToken(response.token);
       authService.saveUser(response.user);
       setUser(response.user);
 
-      // Rediriger vers dashboard
       navigate('/dashboard');
     } catch (error) {
       console.error('Erreur lors de la connexion:', error);
@@ -68,27 +61,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  // Register
-  const register = async (credentials: RegisterCredentials): Promise<void> => {
-    setIsLoading(true);
-    try {
-      // POST /api/v1/Users (création d'utilisateur)
-      await authService.register(credentials);
-
-      // Connecter automatiquement après inscription
-      await login({
-        identifiant: credentials.identifiant,
-        password: credentials.password,
-      });
-    } catch (error) {
-      console.error('Erreur lors de l\'inscription:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Logout
   const logout = (): void => {
     authService.clearAuth();
     setUser(null);
@@ -100,14 +72,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     isAuthenticated,
     isLoading,
     login,
-    register,
     logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// Hook personnalisé pour utiliser le AuthContext
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
 

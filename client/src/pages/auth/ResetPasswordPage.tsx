@@ -17,7 +17,6 @@ export const ResetPasswordPage = () => {
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Récupérer le token depuis l'URL au montage
   useEffect(() => {
     const tokenFromUrl = searchParams.get('token');
     if (tokenFromUrl) {
@@ -30,7 +29,6 @@ export const ResetPasswordPage = () => {
     setError('');
     setSuccess(false);
 
-    // Validation
     if (!token) {
       setError('Token manquant. Veuillez entrer votre token de réinitialisation.');
       return;
@@ -41,8 +39,8 @@ export const ResetPasswordPage = () => {
       return;
     }
 
-    if (password.length < 8) {
-      setError('Le mot de passe doit contenir au moins 8 caractères');
+    if (password.length < 6 || password.length > 100) {
+      setError('Le mot de passe doit contenir entre 6 et 100 caractères');
       return;
     }
 
@@ -54,11 +52,9 @@ export const ResetPasswordPage = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Endpoint à implémenter côté backend
       await authService.resetPassword({ token, password, confirmPassword });
       setSuccess(true);
 
-      // Rediriger vers login après 2 secondes
       setTimeout(() => {
         navigate('/login');
       }, 2000);
