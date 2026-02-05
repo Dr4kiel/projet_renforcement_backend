@@ -82,6 +82,13 @@ class LineAgent:
         try:
             self._refresh_line_info()
 
+            if self._is_idle():
+                logger.debug(
+                    "Ligne %d - En attente d'un OF",
+                    self.line_id,
+                )
+                return
+
             readings = self._tick_sensors()
             if readings:
                 self._repo.insert_historian_readings_batch(readings)
@@ -96,6 +103,13 @@ class LineAgent:
 
         except Exception:
             logger.exception("Erreur lors du tick pour ligne %d", self.line_id)
+
+    def _is_idle(self) -> bool:
+        """Vérifie si la ligne est inactive (pas d'OF et pas de changement en cours)."""
+        return (
+            self._line_info.of_en_cours is None
+            and not self._line_info.is_changement
+        )
 
     def _tick_sensors(self) -> list[SensorReading]:
         """Génère une lecture pour chaque capteur."""
