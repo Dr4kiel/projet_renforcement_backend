@@ -34,6 +34,17 @@ def wait_for_db(host, port, database, user, password, max_retries=30):
     return False
 
 
+def check_if_data_exists(cursor):
+    """Vérifie si des données existent déjà dans la table Roles"""
+    try:
+        cursor.execute('SELECT COUNT(*) FROM "Roles"')
+        count = cursor.fetchone()[0]
+        return count > 0
+    except Exception as e:
+        print(f"Erreur lors de la vérification des données existantes: {e}")
+        return False
+
+
 def load_json_file(filepath):
     """Charge un fichier JSON"""
     try:
@@ -241,34 +252,6 @@ def insert_lines(cursor, lines_data, equipment_id_mapping, of_id_mapping):
     print(f"{len(lines_data)} lignes de production traitées")
 
 
-def insert_historian(cursor, historian_data, tag_id_mapping):
-    """Insert historian data into Historian table using tag id mapping"""
-    if not historian_data:
-        return
-
-    print("\nInsertion des données historiques...")
-    for record in historian_data:
-        try:
-            json_tag_id = record.get('tag_name')
-            real_tag_id = tag_id_mapping.get(json_tag_id)
-
-            if real_tag_id is None:
-                continue
-
-            cursor.execute(
-                '''INSERT INTO "Historian" (timestamp, value, tag_name)
-                   VALUES (%s, %s, %s)''',
-                (
-                    record.get('timestamp', datetime.utcnow().isoformat()),
-                    record.get('value', 0),
-                    real_tag_id
-                )
-            )
-        except Exception as e:
-            print(f"Erreur lors de l'insertion de l'enregistrement historique: {e}")
-    print(f"{len(historian_data)} enregistrements historiques traités")
-
-
 def insert_equipment_tags(cursor, equipment_tags_data, equipment_id_mapping, tag_id_mapping):
     """Insert equipment-tag associations into Equipment_Tag table using mappings"""
     if not equipment_tags_data:
@@ -333,7 +316,6 @@ def main():
     tags_data = load_json_file(config_dir / 'tags.json')
     ofs_data = load_json_file(config_dir / 'ofs.json')
     lines_data = load_json_file(config_dir / 'lines.json')
-    historian_data = load_json_file(config_dir / 'historian.json')
     equipment_tags_data = load_json_file(config_dir / 'equipment_tags.json')
 
     # Connexion et insertion
@@ -344,6 +326,16 @@ def main():
 
         print("Connecté avec succès !")
 
+        print("\nVérification de l'état de la base de données...")
+        if check_if_data_exists(cursor):
+            print("=" * 60)
+            print("Des rôles existent déjà dans la base de données.")
+            print("Aucune insertion ne sera effectuée pour éviter les doublons.")
+            print("=" * 60)
+            return
+
+        print("Aucune donnée existante détectée. Démarrage de l'insertion...")
+
         # Insérer les données dans le bon ordre
         role_id_mapping = insert_roles(cursor, roles_data)
         insert_users(cursor, users_data, role_id_mapping)
@@ -351,7 +343,6 @@ def main():
         tag_id_mapping, tag_name_to_id = insert_tags(cursor, tags_data)
         of_id_mapping = insert_ofs(cursor, ofs_data)
         insert_lines(cursor, lines_data, equipment_id_mapping, of_id_mapping)
-        insert_historian(cursor, historian_data, tag_id_mapping)
         insert_equipment_tags(cursor, equipment_tags_data, equipment_id_mapping, tag_id_mapping)
 
         # Commit des changements
