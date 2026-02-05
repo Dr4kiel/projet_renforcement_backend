@@ -76,19 +76,54 @@ export const DashboardPage = () => {
                 </div>
               </div>
 
-              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-md">
-                <h3 className="text-sm font-medium text-green-800 mb-2">
-                  Statut de l'authentification
+              <div className="border-t border-gray-200 pt-6 mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Accès rapide au Back-Office
                 </h3>
-                <p className="text-sm text-green-700">
-                  Le système d'authentification est fonctionnel et connecté au backend !
-                </p>
-                <ul className="mt-2 text-xs text-green-700 list-disc list-inside space-y-1">
-                  <li>✅ POST /api/v1/Auth/login - Connexion</li>
-                  <li>✅ POST /api/v1/Users - Création d'utilisateur</li>
-                  <li>⏳ Forgot password - À implémenter</li>
-                  <li>⏳ Reset password - À implémenter</li>
-                </ul>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <a
+                    href="/backoffice/users"
+                    className="p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+                  >
+                    <h4 className="font-medium text-gray-900">Utilisateurs</h4>
+                    <p className="text-sm text-gray-500 mt-1">Gérer les utilisateurs</p>
+                  </a>
+                  <a
+                    href="/backoffice/roles"
+                    className="p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+                  >
+                    <h4 className="font-medium text-gray-900">Rôles</h4>
+                    <p className="text-sm text-gray-500 mt-1">Gérer les rôles</p>
+                  </a>
+                  <a
+                    href="/backoffice/equipments"
+                    className="p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+                  >
+                    <h4 className="font-medium text-gray-900">Équipements</h4>
+                    <p className="text-sm text-gray-500 mt-1">Gérer les équipements</p>
+                  </a>
+                  <a
+                    href="/backoffice/lines"
+                    className="p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+                  >
+                    <h4 className="font-medium text-gray-900">Lignes</h4>
+                    <p className="text-sm text-gray-500 mt-1">Gérer les lignes de production</p>
+                  </a>
+                  <a
+                    href="/backoffice/ofs"
+                    className="p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+                  >
+                    <h4 className="font-medium text-gray-900">OFs</h4>
+                    <p className="text-sm text-gray-500 mt-1">Gérer les ordres de fabrication</p>
+                  </a>
+                  <a
+                    href="/backoffice/tags"
+                    className="p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+                  >
+                    <h4 className="font-medium text-gray-900">Tags</h4>
+                    <p className="text-sm text-gray-500 mt-1">Gérer les tags de capteurs</p>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
