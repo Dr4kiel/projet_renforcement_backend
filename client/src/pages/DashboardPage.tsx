@@ -75,21 +75,6 @@ export const DashboardPage = () => {
                   </p>
                 </div>
               </div>
-
-              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-md">
-                <h3 className="text-sm font-medium text-green-800 mb-2">
-                  Statut de l'authentification
-                </h3>
-                <p className="text-sm text-green-700">
-                  Le système d'authentification est fonctionnel et connecté au backend !
-                </p>
-                <ul className="mt-2 text-xs text-green-700 list-disc list-inside space-y-1">
-                  <li>✅ POST /api/v1/Auth/login - Connexion</li>
-                  <li>✅ POST /api/v1/Users - Création d'utilisateur</li>
-                  <li>⏳ Forgot password - À implémenter</li>
-                  <li>⏳ Reset password - À implémenter</li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>

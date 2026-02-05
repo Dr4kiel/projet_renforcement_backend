@@ -1,5 +1,4 @@
 import { useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -69,15 +68,6 @@ export const LoginPage = () => {
               disabled={isLoading}
               required
             />
-
-            <div className="flex items-center justify-end">
-              <Link
-                to="/forgot-password"
-                className="text-sm font-medium text-blue-600 hover:text-blue-500"
-              >
-                Mot de passe oublié ?
-              </Link>
-            </div>
 
             <Button type="submit" isLoading={isLoading}>
               Se connecter
