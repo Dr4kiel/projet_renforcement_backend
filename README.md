@@ -57,7 +57,109 @@ Il y aura :
 - Une table Historian pour stocker les données des capteurs (id, tag_name, timestamp, value)
 
 ```mermaid
+erDiagram
+    Users {
+        int id PK
+        varchar identifiant
+        varchar password
+        varchar email
+        timestamp created_at
+        int role FK
+    }
+    
+    Roles {
+        int id PK
+        varchar name
+    }
+    
+    Lines {
+        int id PK
+        varchar name
+        boolean is_changement
+        int temps_changement
+        int equipment FK
+        int of_suivant FK
+        int of_en_cours FK
+    }
+    
+    Equipments {
+        int id PK
+        varchar name
+    }
+    
+    ofs {
+        int id PK
+        varchar of_
+        varchar produit
+        int qte_produite
+        int qte_totale
+    }
+    
+    Tags {
+        int id PK
+        varchar tag_name
+    }
+    
+    Historian {
+        int id PK
+        timestamp timestamp_
+        numeric value_
+        int tag_name FK
+    }
+    
+    Equipment_Tag {
+        int equipment FK
+        int tag_name FK
+    }
+    
+    Users ||--o{ Roles : "has role"
+    Lines ||--|| Equipments : "uses equipment"
+    Lines ||--o| ofs : "current OF"
+    Lines ||--o| ofs : "next OF"
+    Tags ||--o{ Historian : "stores values"
+    Equipments ||--o{ Equipment_Tag : "has tags"
+    Tags ||--o{ Equipment_Tag : "belongs to equipment"
+```
 
+## GitFlow
+- La branche `stable` contient le code stable et déployable
+- La branche `dev` est utilisée pour le développement quotidien et provient de la branche `stable`
+- La branche `docs` est utilisée pour la documentation du projet et provient de la branche `stable`
+- La branche `client` est utilisée pour le développement du client React et provient de la branche `dev`
+- La branche `server` est utilisée pour le développement de l'API ASP.NET Core et provient de la branche `dev`
+- La branche `agents` est utilisée pour le développement des scripts Python et provient de la branche `dev`
+- Les branches de fonctionnalités (feature branches) sont créées à partir des branches `client`, `server` ou `agents` selon le type de fonctionnalité à développer. Une fois la fonctionnalité terminée, elle est fusionnée dans la branche correspondante.
+
+```mermaid
+---
+config:
+    theme: base
+    gitGraph:
+        showCommitLabel: true
+        mainBranchName: "stable"
+---
+gitGraph
+    commit id: "Initial commit"
+    branch dev
+    checkout dev
+    commit id: "Setup project structure"
+    branch client
+    checkout client
+    commit id: "Implement real-time dashboard UI"
+    checkout dev
+    merge client id: "Merge client feature"
+    branch server
+    checkout server
+    commit id: "Implement SignalR backend"
+    checkout dev
+    merge server id: "Merge server feature"
+    branch agents
+    checkout agents
+    commit id: "Create data simulation scripts"
+    checkout dev
+    merge agents id: "Merge agents feature"
+    checkout stable
+    merge dev id: "Merge dev into stable for release"
 ```
 
 ## Auteurs
