@@ -1,0 +1,14 @@
+[
+  {
+    "of_": "OF-2024-001",
+    "produit": "Produit A",
+    "qte_produite": 150,
+    "qte_totale": 1000
+  },
+  {
+    "of_": "OF-2024-002",
+    "produit": "Produit B",
+    "qte_produite": 0,
+    "qte_totale": 500
+  }
+]

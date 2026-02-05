@@ -1,0 +1,14 @@
+[
+  {
+    "tag_name": "TEMP_MACHINE_A"
+  },
+  {
+    "tag_name": "SPEED_MACHINE_A"
+  },
+  {
+    "tag_name": "PRESSURE_MACHINE_B"
+  },
+  {
+    "tag_name": "VIBRATION_CONVOYEUR_1"
+  }
+]

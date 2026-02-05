@@ -71,24 +71,26 @@ services:
       - dashboard-network
     restart: unless-stopped
 
-  # Agents Python de simulation
-  # agents:
-  #   build:
-  #     context: ./agents
-  #     dockerfile: Dockerfile
-  #   container_name: production-dashboard-agents
-  #   environment:
-  #     - DB_HOST=postgres
-  #     - DB_PORT=5432
-  #     - DB_NAME=production_dashboard
-  #     - DB_USER=postgres
-  #     - DB_PASSWORD=postgres
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   networks:
-  #     - dashboard-network
-  #   restart: unless-stopped
+  # Agents Python de remplissage de données (s'exécute une seule fois)
+  agents:
+    build:
+      context: ./agents
+      dockerfile: Dockerfile
+    container_name: production-dashboard-agents
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=production_dashboard
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    depends_on:
+      backend:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - dashboard-network
+    restart: "no"
 
 volumes:
   postgres_data:
