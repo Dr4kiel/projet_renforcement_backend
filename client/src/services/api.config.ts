@@ -1,4 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050';
+
 const API_VERSION = 'v1';
 
 export const API_ENDPOINTS = {

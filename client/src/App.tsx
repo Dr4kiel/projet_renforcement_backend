@@ -16,6 +16,7 @@ import { OfsPage } from './pages/backoffice/OfsPage';
 import { OfFormPage } from './pages/backoffice/OfFormPage';
 import { TagsPage } from './pages/backoffice/TagsPage';
 import { TagFormPage } from './pages/backoffice/TagFormPage';
+import { ProductionDashboardPage } from './pages/ProductionDashboardPage';
 
 function App() {
   return (
@@ -28,6 +29,16 @@ function App() {
           {/* Routes protégées */}
           <Route
             path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <ProductionDashboardPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Dashboard simple (pour admin ou debugging) */}
+          <Route
+            path="/dashboard/simple"
             element={
               <ProtectedRoute>
                 <DashboardPage />
@@ -44,6 +55,9 @@ function App() {
               </ProtectedRoute>
             }
           >
+            {/* Redirect /backoffice to /backoffice/users by default */}
+            <Route index element={<Navigate to="users" replace />} />
+
             {/* Users */}
             <Route path="users" element={<UsersPage />} />
             <Route path="users/new" element={<UserFormPage />} />

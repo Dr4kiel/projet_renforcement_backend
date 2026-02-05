@@ -9,15 +9,15 @@ import {
 } from '../types/auth';
 
 class AuthService {
-  // POST /api/v1/Auth/login
+  // POST /auth/login
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     const response = await api.post<AuthResponse>('/api/v1/auth/login', credentials);
     return response.data;
   }
 
-  // POST /api/v1/Users/{id}/change-password
+  // POST /users/{id}/change-password
   async changePassword(userId: number, request: ChangePasswordRequest): Promise<void> {
-    await api.post(`/api/v1/Users/${userId}/change-password`, request);
+    await api.post(`/api/v1/users/${userId}/change-password`, request);
   }
 
   async forgotPassword(request: ForgotPasswordRequest): Promise<void> {
