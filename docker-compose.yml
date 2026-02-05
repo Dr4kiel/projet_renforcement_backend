@@ -92,6 +92,33 @@ services:
       - dashboard-network
     restart: "no"
 
+  # Agent de simulation des lignes de production (tourne en continu)
+  line-agent:
+    build:
+      context: ./agents
+      dockerfile: Dockerfile
+    container_name: production-dashboard-line-agent
+    command: ["python", "-m", "line_agent", "--line-ids", "1", "2"]
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=production_dashboard
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - AGENT_INTERVAL=5.0
+      - AGENT_PRODUCTION_INCREMENT=1
+      - AGENT_CHANGEOVER_PROBABILITY=0
+      - AGENT_CHANGEOVER_DURATION=30
+      - AGENT_LOG_LEVEL=INFO
+    depends_on:
+      agents:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    networks:
+      - dashboard-network
+    restart: unless-stopped
+
 volumes:
   postgres_data:
     driver: local

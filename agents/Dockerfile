@@ -8,8 +8,9 @@ COPY requirements.txt .
 # Installer les dépendances
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copier tout le dossier seed_generation avec ses fichiers
+# Copier les modules
 COPY seed_generation/ ./seed_generation/
+COPY line_agent/ ./line_agent/
 
 # Rendre le script exécutable
 RUN chmod +x seed_generation/seed_data.py
