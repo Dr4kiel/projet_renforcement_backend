@@ -52,7 +52,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       authService.saveUser(response.user);
       setUser(response.user);
 
-      navigate('/dashboard');
+      // Rediriger selon le rôle
+      const isAdmin = response.user.roleName.toLowerCase() === 'admin';
+      navigate(isAdmin ? '/backoffice' : '/dashboard');
     } catch (error) {
       console.error('Erreur lors de la connexion:', error);
       throw error;

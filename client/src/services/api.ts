@@ -2,7 +2,7 @@ import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 
 // Créer une instance Axios avec configuration de base
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5050',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5050/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
