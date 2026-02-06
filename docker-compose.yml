@@ -36,24 +36,82 @@ services:
     networks:
       - dashboard-network
 
-  # API Backend ASP.NET Core avec SignalR
-  backend:
+  # ========== MICROSERVICES ARCHITECTURE ==========
+
+  # API Gateway (Point d'entrée unique)
+  gateway:
     build:
-      context: ./server
+      context: ./gateway
       dockerfile: Dockerfile
-    container_name: production-dashboard-api
+    container_name: production-dashboard-gateway
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
+      - ASPNETCORE_URLS=http://+:5000
     ports:
-      - "5050:8080"
+      - "5000:5000"
+    depends_on:
+      - backoffice
+      - realtime
+    networks:
+      - dashboard-network
+    restart: unless-stopped
+
+  # Service Back-Office (CRUD Operations)
+  backoffice:
+    build:
+      context: ./services/backoffice
+      dockerfile: Dockerfile
+    container_name: production-dashboard-backoffice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5001
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
+    expose:
+      - "5001"
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - dashboard-network
     restart: unless-stopped
+
+  # Service Temps Réel (SignalR)
+  realtime:
+    build:
+      context: ./services/realtime
+      dockerfile: Dockerfile
+    container_name: production-dashboard-realtime
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5002
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
+    expose:
+      - "5002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - dashboard-network
+    restart: unless-stopped
+
+  # ========== LEGACY MONOLITHIC BACKEND (Commented for reference) ==========
+  # backend:
+  #   build:
+  #     context: ./server
+  #     dockerfile: Dockerfile
+  #   container_name: production-dashboard-api
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Production
+  #     - ASPNETCORE_URLS=http://+:8080
+  #     - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=production_dashboard;Username=postgres;Password=postgres
+  #   ports:
+  #     - "5050:8080"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   networks:
+  #     - dashboard-network
+  #   restart: unless-stopped
 
   # Frontend React
   frontend:
@@ -62,11 +120,11 @@ services:
       dockerfile: Dockerfile
     container_name: production-dashboard-client
     environment:
-      - VITE_API_URL=http://localhost:5050
+      - VITE_API_URL=http://localhost:5000
     ports:
       - "3000:80"
     depends_on:
-      - backend
+      - gateway
     networks:
       - dashboard-network
     restart: unless-stopped
@@ -84,7 +142,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
     depends_on:
-      backend:
+      backoffice:
         condition: service_started
       postgres:
         condition: service_healthy
