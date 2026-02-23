@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Admin"
+  },
+  {
+    "name": "Operator"
+  },
+  {
+    "name": "Viewer"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Alpha",
+    "is_changement": false,
+    "temps_changement": 0,
+    "equipment": 1,
+    "of_suivant": 2,
+    "of_en_cours": 1
+  },
+  {
+    "name": "Beta",
+    "is_changement": true,
+    "temps_changement": 30,
+    "equipment": 2,
+    "of_suivant": null,
+    "of_en_cours": null
+  },
+  {
+    "name": "Gamma",
+    "is_changement": false,
+    "temps_changement": 0,
+    "equipment": 3,
+    "of_suivant": null,
+    "of_en_cours": null
+  }
+]
