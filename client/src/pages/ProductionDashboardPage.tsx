@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { productionApi } from '../services/productionApi';
+import signalrService from '../services/signalrService';
 import type { Line, ProductionOrder } from '../types/production';
 
 interface SensorData {
@@ -24,6 +25,7 @@ export const ProductionDashboardPage = () => {
   const [productionOrders, setProductionOrders] = useState<ProductionOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSignalRConnected, setIsSignalRConnected] = useState(false);
 
   // Load lines and OFs from backend
   useEffect(() => {
@@ -116,6 +118,63 @@ export const ProductionDashboardPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // SignalR connection for real-time production updates
+  useEffect(() => {
+    const setupSignalR = async () => {
+      try {
+        // Start SignalR connection
+        await signalrService.startConnection();
+        setIsSignalRConnected(true);
+
+        // Subscribe to production progress updates (when qteProduite changes)
+        signalrService.onProductionProgress((data) => {
+          console.log('Production progress update:', data);
+
+          // Update the OF in allOfs state
+          setAllOfs((prevOfs) =>
+            prevOfs.map((of) =>
+              of.id === data.ofId
+                ? { ...of, qteProduite: data.qteProduite, qteTotale: data.qteTotale }
+                : of
+            )
+          );
+        });
+
+        // Subscribe to OF updates (complete OF object)
+        signalrService.onOfUpdated((updatedOf) => {
+          console.log('OF updated:', updatedOf);
+
+          setAllOfs((prevOfs) =>
+            prevOfs.map((of) => (of.id === updatedOf.id ? updatedOf : of))
+          );
+        });
+
+        // Subscribe to line updates
+        signalrService.onLineUpdated((updatedLine) => {
+          console.log('Line updated:', updatedLine);
+
+          setLines((prevLines) =>
+            prevLines.map((line) => (line.id === updatedLine.id ? updatedLine : line))
+          );
+        });
+
+      } catch (error) {
+        console.error('Failed to setup SignalR:', error);
+        setIsSignalRConnected(false);
+      }
+    };
+
+    setupSignalR();
+
+    // Cleanup on unmount
+    return () => {
+      signalrService.off('ProductionProgress');
+      signalrService.off('OfUpdated');
+      signalrService.off('LineUpdated');
+      signalrService.stopConnection().then(() => setIsSignalRConnected(false));
+    };
+  }, []);
+
   const getProgressColor = (percentage: number) => {
     if (percentage >= 80) return 'bg-green-500';
     if (percentage >= 50) return 'bg-blue-500';
@@ -165,10 +224,25 @@ export const ProductionDashboardPage = () => {
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-3">
               <h1 className="text-xl font-bold text-gray-900">
                 Dashboard de Production - Temps Réel
               </h1>
+              <span
+                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  isSignalRConnected
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}
+                title={isSignalRConnected ? 'Connecté en temps réel' : 'Déconnecté'}
+              >
+                <span
+                  className={`w-2 h-2 mr-1.5 rounded-full ${
+                    isSignalRConnected ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+                  }`}
+                ></span>
+                {isSignalRConnected ? 'Live' : 'Hors ligne'}
+              </span>
             </div>
 
             <div className="flex items-center space-x-4">
