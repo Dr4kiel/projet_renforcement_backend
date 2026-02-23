@@ -9,7 +9,7 @@ namespace server.Controllers;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class LinesController : ControllerBase
 {
     private readonly ILineService _lineService;
