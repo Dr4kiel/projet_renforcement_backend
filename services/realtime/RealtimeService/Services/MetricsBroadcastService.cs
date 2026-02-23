@@ -71,13 +71,15 @@ public class MetricsBroadcastService : BackgroundService
                     // Get the most recent historian data for each tag (within the last 30 seconds)
                     var cutoffTime = DateTime.UtcNow.AddSeconds(-30);
 
-                    var latestMetrics = await dbContext.Historian
+                    var recentHistorian = await dbContext.Historian
                         .Where(h => tagIds.Contains(h.TagNameId) && h.Timestamp >= cutoffTime)
                         .Include(h => h.TagNameNavigation)
-                        .GroupBy(h => h.TagNameId)
-                        .Select(g => g.OrderByDescending(h => h.Timestamp).FirstOrDefault())
-                        .Where(h => h != null)
                         .ToListAsync(cancellationToken);
+
+                    var latestMetrics = recentHistorian
+                        .GroupBy(h => h.TagNameId)
+                        .Select(g => g.OrderByDescending(h => h.Timestamp).First())
+                        .ToList();
 
                     // Build metrics dictionary
                     var metricsDict = latestMetrics
