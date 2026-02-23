@@ -1,13 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { productionApi } from '../services/productionApi';
-import type { Line, ProductionOrder } from '../types/production';
+import signalrService from '../services/signalrService';
+import type { Line, ProductionMetricsDto, ProductionOrder } from '../types/production';
 
 interface SensorData {
   pressure: number;
   speed: number;
   temperature: number;
   vibration: number;
+}
+
+function extractSensorData(metrics: Record<string, number>): SensorData {
+  const data: SensorData = { pressure: 0, speed: 0, temperature: 0, vibration: 0 };
+  for (const [key, value] of Object.entries(metrics)) {
+    const upper = key.toUpperCase();
+    if (upper.startsWith('PRESSURE_')) data.pressure = value;
+    else if (upper.startsWith('SPEED_')) data.speed = value;
+    else if (upper.startsWith('TEMP_')) data.temperature = value;
+    else if (upper.startsWith('VIBRATION_')) data.vibration = value;
+  }
+  return data;
 }
 
 export const ProductionDashboardPage = () => {
@@ -24,6 +37,9 @@ export const ProductionDashboardPage = () => {
   const [productionOrders, setProductionOrders] = useState<ProductionOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSignalRConnected, setIsSignalRConnected] = useState(false);
+  const previousLineIdRef = useRef<number | null>(null);
+  const selectedLineIdRef = useRef<number | null>(null);
 
   // Load lines and OFs from backend
   useEffect(() => {
@@ -31,7 +47,6 @@ export const ProductionDashboardPage = () => {
       try {
         setIsLoading(true);
 
-        // Fetch both lines and OFs in parallel
         const [linesData, ofsData] = await Promise.all([
           productionApi.getAllLines(),
           productionApi.getAllOfs(),
@@ -40,7 +55,6 @@ export const ProductionDashboardPage = () => {
         setLines(linesData);
         setAllOfs(ofsData);
 
-        // Select first line by default if available
         if (linesData.length > 0) {
           setSelectedLineId(linesData[0].id);
         }
@@ -70,51 +84,101 @@ export const ProductionDashboardPage = () => {
       return;
     }
 
-    // Get OFs for the selected line by matching IDs
     const ofs: ProductionOrder[] = [];
 
     if (selectedLine.ofEnCoursId) {
       const ofEnCours = allOfs.find((of) => of.id === selectedLine.ofEnCoursId);
       if (ofEnCours) {
-        ofs.push({
-          ...ofEnCours,
-          lineName: selectedLine.name,
-        });
+        ofs.push({ ...ofEnCours, lineName: selectedLine.name });
       }
     }
 
     if (selectedLine.ofSuivantId) {
       const ofSuivant = allOfs.find((of) => of.id === selectedLine.ofSuivantId);
       if (ofSuivant) {
-        ofs.push({
-          ...ofSuivant,
-          lineName: selectedLine.name,
-        });
+        ofs.push({ ...ofSuivant, lineName: selectedLine.name });
       }
     }
 
     setProductionOrders(ofs);
   }, [selectedLineId, lines, allOfs]);
 
-  // Simulate sensor data in real-time (mocked data)
+  // Keep ref in sync with selectedLineId for use in SignalR callbacks
   useEffect(() => {
-    const updateSensorData = () => {
-      setSensorData({
-        pressure: 95 + Math.random() * 10, // 95-105 bar
-        speed: 1450 + Math.random() * 100, // 1450-1550 rpm
-        temperature: 72 + Math.random() * 6, // 72-78°C
-        vibration: 0.6 + Math.random() * 0.3, // 0.6-0.9 mm/s
-      });
+    selectedLineIdRef.current = selectedLineId;
+  }, [selectedLineId]);
+
+  // SignalR connection
+  useEffect(() => {
+    const handleMetrics = (data: ProductionMetricsDto) => {
+      // Filter: only process metrics for the currently selected line
+      if (data.lineId !== selectedLineIdRef.current) return;
+
+      setSensorData(extractSensorData(data.metrics));
+
+      if (data.status) {
+        setAllOfs((prevOfs) =>
+          prevOfs.map((of) => {
+            if (of.of === data.status.currentOf) {
+              return {
+                ...of,
+                qteProduite: data.status.qteProduite,
+                qteTotale: data.status.qteTotale,
+              };
+            }
+            return of;
+          })
+        );
+      }
     };
 
-    // Initial update
-    updateSensorData();
+    const setupSignalR = async () => {
+      try {
+        signalrService.setOnReconnecting(() => setIsSignalRConnected(false));
+        signalrService.setOnReconnected(() => setIsSignalRConnected(true));
+        signalrService.setOnClose(() => setIsSignalRConnected(false));
 
-    // Update every 2 seconds
-    const interval = setInterval(updateSensorData, 2000);
+        await signalrService.startConnection();
+        setIsSignalRConnected(true);
 
-    return () => clearInterval(interval);
+        // Listen to both broadcast (all lines) and line-specific events
+        signalrService.onReceiveMetrics(handleMetrics);
+        signalrService.onReceiveLineMetrics(handleMetrics);
+      } catch (err) {
+        console.error('Failed to setup SignalR:', err);
+        setIsSignalRConnected(false);
+      }
+    };
+
+    setupSignalR();
+
+    return () => {
+      signalrService.off('ReceiveMetrics');
+      signalrService.off('ReceiveLineMetrics');
+      signalrService.stopConnection().then(() => setIsSignalRConnected(false));
+    };
   }, []);
+
+  // Subscribe/unsubscribe to line when selection changes
+  useEffect(() => {
+    if (!isSignalRConnected) return;
+
+    const switchLine = async () => {
+      // Unsubscribe from previous line
+      if (previousLineIdRef.current !== null) {
+        await signalrService.unsubscribeFromLine(previousLineIdRef.current);
+      }
+
+      // Subscribe to new line
+      if (selectedLineId !== null) {
+        await signalrService.subscribeToLine(selectedLineId);
+      }
+
+      previousLineIdRef.current = selectedLineId;
+    };
+
+    switchLine();
+  }, [selectedLineId, isSignalRConnected]);
 
   const getProgressColor = (percentage: number) => {
     if (percentage >= 80) return 'bg-green-500';
@@ -165,10 +229,25 @@ export const ProductionDashboardPage = () => {
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-3">
               <h1 className="text-xl font-bold text-gray-900">
                 Dashboard de Production - Temps Réel
               </h1>
+              <span
+                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  isSignalRConnected
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}
+                title={isSignalRConnected ? 'Connecté en temps réel' : 'Déconnecté'}
+              >
+                <span
+                  className={`w-2 h-2 mr-1.5 rounded-full ${
+                    isSignalRConnected ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+                  }`}
+                ></span>
+                {isSignalRConnected ? 'Live' : 'Hors ligne'}
+              </span>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -221,7 +300,7 @@ export const ProductionDashboardPage = () => {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {/* Pressure */}
             <div
-              className={`${getSensorStatus(sensorData.pressure, 95, 105).bg} p-6 rounded-lg border-2 ${getSensorStatus(sensorData.pressure, 95, 105).color} border-current`}
+              className={`${getSensorStatus(sensorData.pressure, 4.0, 8.0).bg} p-6 rounded-lg border-2 ${getSensorStatus(sensorData.pressure, 4.0, 8.0).color} border-current`}
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -231,18 +310,18 @@ export const ProductionDashboardPage = () => {
                 </div>
                 <div className="text-right">
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSensorStatus(sensorData.pressure, 95, 105).bg}`}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSensorStatus(sensorData.pressure, 4.0, 8.0).bg}`}
                   >
-                    {getSensorStatus(sensorData.pressure, 95, 105).status}
+                    {getSensorStatus(sensorData.pressure, 4.0, 8.0).status}
                   </span>
-                  <p className="text-xs mt-2">95-105 bar</p>
+                  <p className="text-xs mt-2">4.0-8.0 bar</p>
                 </div>
               </div>
             </div>
 
             {/* Speed */}
             <div
-              className={`${getSensorStatus(sensorData.speed, 1450, 1550).bg} p-6 rounded-lg border-2 ${getSensorStatus(sensorData.speed, 1450, 1550).color} border-current`}
+              className={`${getSensorStatus(sensorData.speed, 1200, 1800).bg} p-6 rounded-lg border-2 ${getSensorStatus(sensorData.speed, 1200, 1800).color} border-current`}
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -252,18 +331,18 @@ export const ProductionDashboardPage = () => {
                 </div>
                 <div className="text-right">
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSensorStatus(sensorData.speed, 1450, 1550).bg}`}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSensorStatus(sensorData.speed, 1200, 1800).bg}`}
                   >
-                    {getSensorStatus(sensorData.speed, 1450, 1550).status}
+                    {getSensorStatus(sensorData.speed, 1200, 1800).status}
                   </span>
-                  <p className="text-xs mt-2">1450-1550 rpm</p>
+                  <p className="text-xs mt-2">1200-1800 rpm</p>
                 </div>
               </div>
             </div>
 
             {/* Temperature */}
             <div
-              className={`${getSensorStatus(sensorData.temperature, 72, 78).bg} p-6 rounded-lg border-2 ${getSensorStatus(sensorData.temperature, 72, 78).color} border-current`}
+              className={`${getSensorStatus(sensorData.temperature, 60, 90).bg} p-6 rounded-lg border-2 ${getSensorStatus(sensorData.temperature, 60, 90).color} border-current`}
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -273,18 +352,18 @@ export const ProductionDashboardPage = () => {
                 </div>
                 <div className="text-right">
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSensorStatus(sensorData.temperature, 72, 78).bg}`}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSensorStatus(sensorData.temperature, 60, 90).bg}`}
                   >
-                    {getSensorStatus(sensorData.temperature, 72, 78).status}
+                    {getSensorStatus(sensorData.temperature, 60, 90).status}
                   </span>
-                  <p className="text-xs mt-2">72-78 °C</p>
+                  <p className="text-xs mt-2">60-90 °C</p>
                 </div>
               </div>
             </div>
 
             {/* Vibration */}
             <div
-              className={`${getSensorStatus(sensorData.vibration, 0.6, 0.9).bg} p-6 rounded-lg border-2 ${getSensorStatus(sensorData.vibration, 0.6, 0.9).color} border-current`}
+              className={`${getSensorStatus(sensorData.vibration, 1.0, 4.5).bg} p-6 rounded-lg border-2 ${getSensorStatus(sensorData.vibration, 1.0, 4.5).color} border-current`}
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -294,11 +373,11 @@ export const ProductionDashboardPage = () => {
                 </div>
                 <div className="text-right">
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSensorStatus(sensorData.vibration, 0.6, 0.9).bg}`}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSensorStatus(sensorData.vibration, 1.0, 4.5).bg}`}
                   >
-                    {getSensorStatus(sensorData.vibration, 0.6, 0.9).status}
+                    {getSensorStatus(sensorData.vibration, 1.0, 4.5).status}
                   </span>
-                  <p className="text-xs mt-2">0.6-0.9 mm/s</p>
+                  <p className="text-xs mt-2">1.0-4.5 mm/s</p>
                 </div>
               </div>
             </div>

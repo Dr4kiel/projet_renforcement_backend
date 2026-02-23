@@ -6,6 +6,23 @@ export interface SensorData {
   timestamp: string;
 }
 
+export interface LineStatusDto {
+  currentOf: string;
+  currentProduct: string;
+  qteProduite: number;
+  qteTotale: number;
+  nextOf: string;
+  isChangement: boolean;
+}
+
+export interface ProductionMetricsDto {
+  lineId: number;
+  lineName: string;
+  timestamp: string;
+  metrics: Record<string, number>;
+  status: LineStatusDto;
+}
+
 export interface ProductionOrder {
   id: number;
   of: string;
