@@ -3,7 +3,7 @@ import api from './api';
 import type { SensorData, ProductionOrder, Line } from '../types/production';
 
 const SIGNALR_HUB_URL =
-  import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:5050';
+  import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:5000';
 
 export class ProductionService {
   private hubConnection: signalR.HubConnection | null = null;
