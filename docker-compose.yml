@@ -36,6 +36,27 @@ services:
     networks:
       - dashboard-network
 
+  # Grafana pour la visualisation de données
+  grafana:
+    image: grafana/grafana:latest
+    container_name: production-dashboard-grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - dashboard-network
+    restart: unless-stopped
+
   # ========== MICROSERVICES ARCHITECTURE ==========
 
   # API Gateway (Point d'entrée unique)
@@ -120,7 +141,7 @@ services:
       dockerfile: Dockerfile
     container_name: production-dashboard-client
     environment:
-      - VITE_API_URL=http://localhost:5000
+      - VITE_API_URL=http://localhost:5050
     ports:
       - "3000:80"
     depends_on:
@@ -179,6 +200,8 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+  grafana_data:
     driver: local
 
 networks:
