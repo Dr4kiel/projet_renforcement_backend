@@ -66,6 +66,12 @@ services:
       - Jwt__SecretKey=${JWT_SECRET_KEY}
     expose:
       - "5001"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5001/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy
@@ -143,7 +149,7 @@ services:
       - DB_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       backoffice:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
     networks:
