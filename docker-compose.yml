@@ -38,6 +38,46 @@ services:
 
   # ========== MICROSERVICES ARCHITECTURE ==========
 
+  # Message Broker RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: production-dashboard-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dashboard-network
+
+  # Service Agent Control (RabbitMQ + SignalR)
+  agent-control:
+    build:
+      context: ./services/agent-control
+      dockerfile: Dockerfile
+    container_name: production-dashboard-agent-control
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5003
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    expose:
+      - "5003"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - dashboard-network
+    restart: unless-stopped
+
   # API Gateway (Point d'entrée unique)
   gateway:
     build:
@@ -52,6 +92,7 @@ services:
     depends_on:
       - backoffice
       - realtime
+      - agent-control
     networks:
       - dashboard-network
     restart: unless-stopped
@@ -168,10 +209,16 @@ services:
       - AGENT_CHANGEOVER_PROBABILITY=0
       - AGENT_CHANGEOVER_DURATION=30
       - AGENT_LOG_LEVEL=INFO
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASSWORD=guest
     depends_on:
       agents:
         condition: service_completed_successfully
       postgres:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - dashboard-network
