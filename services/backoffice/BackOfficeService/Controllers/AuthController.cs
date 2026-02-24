@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server.DTOs.Auth;
 using server.Services.Interfaces;
@@ -38,5 +39,17 @@ public class AuthController : ControllerBase
         }
 
         return Ok(response);
+    }
+
+    /// <summary>
+    /// Validate JWT token - used internally by API Gateway (ForwardAuth)
+    /// </summary>
+    [HttpGet("validate")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public IActionResult Validate()
+    {
+        return Ok();
     }
 }

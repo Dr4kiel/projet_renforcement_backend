@@ -1,0 +1,75 @@
+# Traefik dynamic configuration — routers, middlewares, services
+
+http:
+
+  # ── Middlewares ────────────────────────────────────────────────────────────
+
+  middlewares:
+
+    # Validation JWT : Traefik appelle /api/v1/auth/validate avant de router
+    # 200 → la requête est transmise | 401 → l'erreur JSON backoffice est retournée
+    jwt-auth:
+      forwardAuth:
+        address: "http://backoffice:5001/api/v1/auth/validate"
+        authRequestHeaders:
+          - "Authorization"
+
+    # Supprime le préfixe /realtime avant de transmettre au service realtime
+    strip-realtime:
+      stripPrefix:
+        prefixes:
+          - "/realtime"
+
+  # ── Routers ───────────────────────────────────────────────────────────────
+
+  routers:
+
+    # Routes publiques BackOffice (sans JWT)
+    # Priorité haute pour ne pas être capturées par backoffice-protected
+    # Method(`OPTIONS`) couvre les preflights CORS (aucun token n'est envoyé en preflight)
+    backoffice-public:
+      rule: "Path(`/health`) || (Method(`POST`) && Path(`/api/v1/auth/login`)) || (Method(`OPTIONS`) && PathPrefix(`/api/v1`))"
+      entryPoints:
+        - web
+      service: backoffice-svc
+      priority: 100
+
+    # Routes protégées BackOffice (JWT requis via ForwardAuth)
+    backoffice-protected:
+      rule: "PathPrefix(`/api/v1`)"
+      entryPoints:
+        - web
+      middlewares:
+        - jwt-auth
+      service: backoffice-svc
+      priority: 10
+
+    # Hubs SignalR — pas de JWT gateway (JWT géré par RealtimeService via query param)
+    realtime-hubs:
+      rule: "PathPrefix(`/hubs`)"
+      entryPoints:
+        - web
+      service: realtime-svc
+
+    # Health check du service realtime (/realtime/health → /health)
+    realtime-health:
+      rule: "Path(`/realtime/health`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-realtime
+      service: realtime-svc
+
+  # ── Services ──────────────────────────────────────────────────────────────
+
+  services:
+
+    backoffice-svc:
+      loadBalancer:
+        servers:
+          - url: "http://backoffice:5001"
+
+    realtime-svc:
+      loadBalancer:
+        servers:
+          - url: "http://realtime:5002"
