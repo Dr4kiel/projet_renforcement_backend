@@ -1,14 +1,1502 @@
 [
   {
-    "of_": "OF-2026-001",
-    "produit": "Produit A",
-    "qte_produite": 0,
-    "qte_totale": 1000
+    "of_": "OF-2025-0001",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1299,
+    "qte_totale": 1401
   },
   {
-    "of_": "OF-2026-002",
-    "produit": "Produit B",
-    "qte_produite": 0,
-    "qte_totale": 500
+    "of_": "OF-2025-0002",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 447,
+    "qte_totale": 527
+  },
+  {
+    "of_": "OF-2025-0003",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 806,
+    "qte_totale": 820
+  },
+  {
+    "of_": "OF-2025-0004",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 375,
+    "qte_totale": 457
+  },
+  {
+    "of_": "OF-2025-0005",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 908,
+    "qte_totale": 1032
+  },
+  {
+    "of_": "OF-2025-0006",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 951,
+    "qte_totale": 1073
+  },
+  {
+    "of_": "OF-2025-0007",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1673,
+    "qte_totale": 1925
+  },
+  {
+    "of_": "OF-2025-0008",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 985,
+    "qte_totale": 1100
+  },
+  {
+    "of_": "OF-2025-0009",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 733,
+    "qte_totale": 736
+  },
+  {
+    "of_": "OF-2025-0010",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 185,
+    "qte_totale": 206
+  },
+  {
+    "of_": "OF-2025-0011",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 899,
+    "qte_totale": 1051
+  },
+  {
+    "of_": "OF-2025-0012",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1158,
+    "qte_totale": 1185
+  },
+  {
+    "of_": "OF-2025-0013",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 148,
+    "qte_totale": 163
+  },
+  {
+    "of_": "OF-2025-0014",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 954,
+    "qte_totale": 1150
+  },
+  {
+    "of_": "OF-2025-0015",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 675,
+    "qte_totale": 725
+  },
+  {
+    "of_": "OF-2025-0016",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1352,
+    "qte_totale": 1675
+  },
+  {
+    "of_": "OF-2025-0017",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 738,
+    "qte_totale": 838
+  },
+  {
+    "of_": "OF-2025-0018",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1425,
+    "qte_totale": 1460
+  },
+  {
+    "of_": "OF-2025-0019",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1631,
+    "qte_totale": 1836
+  },
+  {
+    "of_": "OF-2025-0020",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 464,
+    "qte_totale": 576
+  },
+  {
+    "of_": "OF-2025-0021",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1587,
+    "qte_totale": 1806
+  },
+  {
+    "of_": "OF-2025-0022",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 107,
+    "qte_totale": 110
+  },
+  {
+    "of_": "OF-2025-0023",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 233,
+    "qte_totale": 278
+  },
+  {
+    "of_": "OF-2025-0024",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 511,
+    "qte_totale": 601
+  },
+  {
+    "of_": "OF-2025-0025",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 928,
+    "qte_totale": 942
+  },
+  {
+    "of_": "OF-2025-0026",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 1075,
+    "qte_totale": 1242
+  },
+  {
+    "of_": "OF-2025-0027",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 263,
+    "qte_totale": 264
+  },
+  {
+    "of_": "OF-2025-0028",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 205,
+    "qte_totale": 219
+  },
+  {
+    "of_": "OF-2025-0029",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1290,
+    "qte_totale": 1299
+  },
+  {
+    "of_": "OF-2025-0030",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1470,
+    "qte_totale": 1708
+  },
+  {
+    "of_": "OF-2025-0031",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 533,
+    "qte_totale": 652
+  },
+  {
+    "of_": "OF-2025-0032",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1622,
+    "qte_totale": 1731
+  },
+  {
+    "of_": "OF-2025-0033",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 916,
+    "qte_totale": 1144
+  },
+  {
+    "of_": "OF-2025-0034",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1576,
+    "qte_totale": 1967
+  },
+  {
+    "of_": "OF-2025-0035",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 286,
+    "qte_totale": 323
+  },
+  {
+    "of_": "OF-2025-0036",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1665,
+    "qte_totale": 1876
+  },
+  {
+    "of_": "OF-2025-0037",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1387,
+    "qte_totale": 1444
+  },
+  {
+    "of_": "OF-2025-0038",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 958,
+    "qte_totale": 1183
+  },
+  {
+    "of_": "OF-2025-0039",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 834,
+    "qte_totale": 982
+  },
+  {
+    "of_": "OF-2025-0040",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 1042,
+    "qte_totale": 1300
+  },
+  {
+    "of_": "OF-2025-0041",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 410,
+    "qte_totale": 462
+  },
+  {
+    "of_": "OF-2025-0042",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1021,
+    "qte_totale": 1063
+  },
+  {
+    "of_": "OF-2025-0043",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1925,
+    "qte_totale": 1958
+  },
+  {
+    "of_": "OF-2025-0044",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1789,
+    "qte_totale": 1911
+  },
+  {
+    "of_": "OF-2025-0045",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 691,
+    "qte_totale": 717
+  },
+  {
+    "of_": "OF-2025-0046",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 892,
+    "qte_totale": 1060
+  },
+  {
+    "of_": "OF-2025-0047",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1679,
+    "qte_totale": 1995
+  },
+  {
+    "of_": "OF-2025-0048",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 493,
+    "qte_totale": 608
+  },
+  {
+    "of_": "OF-2025-0049",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 453,
+    "qte_totale": 454
+  },
+  {
+    "of_": "OF-2025-0050",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1823,
+    "qte_totale": 1943
+  },
+  {
+    "of_": "OF-2025-0051",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1120,
+    "qte_totale": 1189
+  },
+  {
+    "of_": "OF-2025-0052",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 464,
+    "qte_totale": 475
+  },
+  {
+    "of_": "OF-2025-0053",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1248,
+    "qte_totale": 1434
+  },
+  {
+    "of_": "OF-2025-0054",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1364,
+    "qte_totale": 1662
+  },
+  {
+    "of_": "OF-2025-0055",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1656,
+    "qte_totale": 1764
+  },
+  {
+    "of_": "OF-2025-0056",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1539,
+    "qte_totale": 1914
+  },
+  {
+    "of_": "OF-2025-0057",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1566,
+    "qte_totale": 1790
+  },
+  {
+    "of_": "OF-2025-0058",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1755,
+    "qte_totale": 1867
+  },
+  {
+    "of_": "OF-2025-0059",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1284,
+    "qte_totale": 1525
+  },
+  {
+    "of_": "OF-2025-0060",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 450,
+    "qte_totale": 539
+  },
+  {
+    "of_": "OF-2025-0061",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 396,
+    "qte_totale": 438
+  },
+  {
+    "of_": "OF-2025-0062",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1620,
+    "qte_totale": 1961
+  },
+  {
+    "of_": "OF-2025-0063",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 172,
+    "qte_totale": 213
+  },
+  {
+    "of_": "OF-2025-0064",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 629,
+    "qte_totale": 641
+  },
+  {
+    "of_": "OF-2025-0065",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 618,
+    "qte_totale": 697
+  },
+  {
+    "of_": "OF-2025-0066",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1158,
+    "qte_totale": 1404
+  },
+  {
+    "of_": "OF-2025-0067",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1477,
+    "qte_totale": 1513
+  },
+  {
+    "of_": "OF-2025-0068",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1218,
+    "qte_totale": 1288
+  },
+  {
+    "of_": "OF-2025-0069",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 476,
+    "qte_totale": 493
+  },
+  {
+    "of_": "OF-2025-0070",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1647,
+    "qte_totale": 1702
+  },
+  {
+    "of_": "OF-2025-0071",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 760,
+    "qte_totale": 911
+  },
+  {
+    "of_": "OF-2025-0072",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 612,
+    "qte_totale": 697
+  },
+  {
+    "of_": "OF-2025-0073",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1371,
+    "qte_totale": 1473
+  },
+  {
+    "of_": "OF-2025-0074",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 1663,
+    "qte_totale": 1685
+  },
+  {
+    "of_": "OF-2025-0075",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1446,
+    "qte_totale": 1511
+  },
+  {
+    "of_": "OF-2025-0076",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1238,
+    "qte_totale": 1280
+  },
+  {
+    "of_": "OF-2025-0077",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 440,
+    "qte_totale": 539
+  },
+  {
+    "of_": "OF-2025-0078",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1862,
+    "qte_totale": 1990
+  },
+  {
+    "of_": "OF-2025-0079",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 533,
+    "qte_totale": 595
+  },
+  {
+    "of_": "OF-2025-0080",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 965,
+    "qte_totale": 1097
+  },
+  {
+    "of_": "OF-2025-0081",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1850,
+    "qte_totale": 1991
+  },
+  {
+    "of_": "OF-2025-0082",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 859,
+    "qte_totale": 990
+  },
+  {
+    "of_": "OF-2025-0083",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1272,
+    "qte_totale": 1547
+  },
+  {
+    "of_": "OF-2025-0084",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1323,
+    "qte_totale": 1645
+  },
+  {
+    "of_": "OF-2025-0085",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 926,
+    "qte_totale": 1064
+  },
+  {
+    "of_": "OF-2025-0086",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 632,
+    "qte_totale": 638
+  },
+  {
+    "of_": "OF-2025-0087",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 230,
+    "qte_totale": 277
+  },
+  {
+    "of_": "OF-2025-0088",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1578,
+    "qte_totale": 1713
+  },
+  {
+    "of_": "OF-2025-0089",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1439,
+    "qte_totale": 1673
+  },
+  {
+    "of_": "OF-2025-0090",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 747,
+    "qte_totale": 797
+  },
+  {
+    "of_": "OF-2025-0091",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 601,
+    "qte_totale": 665
+  },
+  {
+    "of_": "OF-2025-0092",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 260,
+    "qte_totale": 308
+  },
+  {
+    "of_": "OF-2025-0093",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 757,
+    "qte_totale": 905
+  },
+  {
+    "of_": "OF-2025-0094",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 815,
+    "qte_totale": 1007
+  },
+  {
+    "of_": "OF-2025-0095",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 712,
+    "qte_totale": 847
+  },
+  {
+    "of_": "OF-2025-0096",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 625,
+    "qte_totale": 682
+  },
+  {
+    "of_": "OF-2025-0097",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1591,
+    "qte_totale": 1972
+  },
+  {
+    "of_": "OF-2025-0098",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 804,
+    "qte_totale": 888
+  },
+  {
+    "of_": "OF-2025-0099",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1423,
+    "qte_totale": 1428
+  },
+  {
+    "of_": "OF-2025-0100",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1273,
+    "qte_totale": 1514
+  },
+  {
+    "of_": "OF-2025-0101",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1739,
+    "qte_totale": 1927
+  },
+  {
+    "of_": "OF-2025-0102",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1137,
+    "qte_totale": 1298
+  },
+  {
+    "of_": "OF-2025-0103",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1599,
+    "qte_totale": 1891
+  },
+  {
+    "of_": "OF-2025-0104",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 295,
+    "qte_totale": 336
+  },
+  {
+    "of_": "OF-2025-0105",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1528,
+    "qte_totale": 1870
+  },
+  {
+    "of_": "OF-2025-0106",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 107,
+    "qte_totale": 117
+  },
+  {
+    "of_": "OF-2025-0107",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1072,
+    "qte_totale": 1235
+  },
+  {
+    "of_": "OF-2025-0108",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 603,
+    "qte_totale": 620
+  },
+  {
+    "of_": "OF-2025-0109",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1616,
+    "qte_totale": 1708
+  },
+  {
+    "of_": "OF-2025-0110",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1187,
+    "qte_totale": 1312
+  },
+  {
+    "of_": "OF-2025-0111",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 909,
+    "qte_totale": 1085
+  },
+  {
+    "of_": "OF-2025-0112",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1390,
+    "qte_totale": 1488
+  },
+  {
+    "of_": "OF-2025-0113",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1843,
+    "qte_totale": 1931
+  },
+  {
+    "of_": "OF-2025-0114",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 612,
+    "qte_totale": 751
+  },
+  {
+    "of_": "OF-2025-0115",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 872,
+    "qte_totale": 969
+  },
+  {
+    "of_": "OF-2025-0116",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 166,
+    "qte_totale": 187
+  },
+  {
+    "of_": "OF-2025-0117",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 977,
+    "qte_totale": 1136
+  },
+  {
+    "of_": "OF-2025-0118",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1060,
+    "qte_totale": 1293
+  },
+  {
+    "of_": "OF-2025-0119",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1753,
+    "qte_totale": 1797
+  },
+  {
+    "of_": "OF-2025-0120",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 361,
+    "qte_totale": 424
+  },
+  {
+    "of_": "OF-2025-0121",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 222,
+    "qte_totale": 225
+  },
+  {
+    "of_": "OF-2025-0122",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1085,
+    "qte_totale": 1157
+  },
+  {
+    "of_": "OF-2025-0123",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 453,
+    "qte_totale": 474
+  },
+  {
+    "of_": "OF-2025-0124",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1037,
+    "qte_totale": 1058
+  },
+  {
+    "of_": "OF-2025-0125",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 520,
+    "qte_totale": 552
+  },
+  {
+    "of_": "OF-2025-0126",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 251,
+    "qte_totale": 254
+  },
+  {
+    "of_": "OF-2025-0127",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 165,
+    "qte_totale": 172
+  },
+  {
+    "of_": "OF-2025-0128",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 669,
+    "qte_totale": 687
+  },
+  {
+    "of_": "OF-2025-0129",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1283,
+    "qte_totale": 1425
+  },
+  {
+    "of_": "OF-2025-0130",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 804,
+    "qte_totale": 849
+  },
+  {
+    "of_": "OF-2025-0131",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 305,
+    "qte_totale": 344
+  },
+  {
+    "of_": "OF-2025-0132",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 154,
+    "qte_totale": 182
+  },
+  {
+    "of_": "OF-2025-0133",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1106,
+    "qte_totale": 1183
+  },
+  {
+    "of_": "OF-2025-0134",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1258,
+    "qte_totale": 1453
+  },
+  {
+    "of_": "OF-2025-0135",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1392,
+    "qte_totale": 1733
+  },
+  {
+    "of_": "OF-2025-0136",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 556,
+    "qte_totale": 572
+  },
+  {
+    "of_": "OF-2025-0137",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1570,
+    "qte_totale": 1717
+  },
+  {
+    "of_": "OF-2025-0138",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 553,
+    "qte_totale": 673
+  },
+  {
+    "of_": "OF-2025-0139",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1373,
+    "qte_totale": 1416
+  },
+  {
+    "of_": "OF-2025-0140",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 679,
+    "qte_totale": 832
+  },
+  {
+    "of_": "OF-2025-0141",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1863,
+    "qte_totale": 1892
+  },
+  {
+    "of_": "OF-2025-0142",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1337,
+    "qte_totale": 1464
+  },
+  {
+    "of_": "OF-2025-0143",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1712,
+    "qte_totale": 1849
+  },
+  {
+    "of_": "OF-2025-0144",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 857,
+    "qte_totale": 871
+  },
+  {
+    "of_": "OF-2025-0145",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1156,
+    "qte_totale": 1170
+  },
+  {
+    "of_": "OF-2025-0146",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1268,
+    "qte_totale": 1379
+  },
+  {
+    "of_": "OF-2025-0147",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1002,
+    "qte_totale": 1180
+  },
+  {
+    "of_": "OF-2025-0148",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 935,
+    "qte_totale": 1151
+  },
+  {
+    "of_": "OF-2025-0149",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1027,
+    "qte_totale": 1195
+  },
+  {
+    "of_": "OF-2025-0150",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1564,
+    "qte_totale": 1876
+  },
+  {
+    "of_": "OF-2025-0151",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1368,
+    "qte_totale": 1539
+  },
+  {
+    "of_": "OF-2025-0152",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1280,
+    "qte_totale": 1427
+  },
+  {
+    "of_": "OF-2025-0153",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1173,
+    "qte_totale": 1221
+  },
+  {
+    "of_": "OF-2025-0154",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 681,
+    "qte_totale": 720
+  },
+  {
+    "of_": "OF-2025-0155",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1343,
+    "qte_totale": 1504
+  },
+  {
+    "of_": "OF-2025-0156",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1235,
+    "qte_totale": 1373
+  },
+  {
+    "of_": "OF-2025-0157",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1001,
+    "qte_totale": 1117
+  },
+  {
+    "of_": "OF-2025-0158",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1612,
+    "qte_totale": 1840
+  },
+  {
+    "of_": "OF-2025-0159",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1354,
+    "qte_totale": 1611
+  },
+  {
+    "of_": "OF-2025-0160",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 425,
+    "qte_totale": 426
+  },
+  {
+    "of_": "OF-2025-0161",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1548,
+    "qte_totale": 1669
+  },
+  {
+    "of_": "OF-2025-0162",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 646,
+    "qte_totale": 710
+  },
+  {
+    "of_": "OF-2025-0163",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 562,
+    "qte_totale": 607
+  },
+  {
+    "of_": "OF-2025-0164",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 517,
+    "qte_totale": 545
+  },
+  {
+    "of_": "OF-2025-0165",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 922,
+    "qte_totale": 1094
+  },
+  {
+    "of_": "OF-2025-0166",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 633,
+    "qte_totale": 680
+  },
+  {
+    "of_": "OF-2025-0167",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 268,
+    "qte_totale": 314
+  },
+  {
+    "of_": "OF-2025-0168",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 991,
+    "qte_totale": 1045
+  },
+  {
+    "of_": "OF-2025-0169",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 426,
+    "qte_totale": 494
+  },
+  {
+    "of_": "OF-2025-0170",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1768,
+    "qte_totale": 1871
+  },
+  {
+    "of_": "OF-2025-0171",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1443,
+    "qte_totale": 1486
+  },
+  {
+    "of_": "OF-2025-0172",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 181,
+    "qte_totale": 196
+  },
+  {
+    "of_": "OF-2025-0173",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 517,
+    "qte_totale": 536
+  },
+  {
+    "of_": "OF-2025-0174",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 128,
+    "qte_totale": 151
+  },
+  {
+    "of_": "OF-2025-0175",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 469,
+    "qte_totale": 525
+  },
+  {
+    "of_": "OF-2025-0176",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 458,
+    "qte_totale": 494
+  },
+  {
+    "of_": "OF-2025-0177",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1598,
+    "qte_totale": 1639
+  },
+  {
+    "of_": "OF-2025-0178",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 184,
+    "qte_totale": 213
+  },
+  {
+    "of_": "OF-2025-0179",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1019,
+    "qte_totale": 1062
+  },
+  {
+    "of_": "OF-2025-0180",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1076,
+    "qte_totale": 1259
+  },
+  {
+    "of_": "OF-2025-0181",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1334,
+    "qte_totale": 1476
+  },
+  {
+    "of_": "OF-2025-0182",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1147,
+    "qte_totale": 1333
+  },
+  {
+    "of_": "OF-2025-0183",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1616,
+    "qte_totale": 1997
+  },
+  {
+    "of_": "OF-2025-0184",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1552,
+    "qte_totale": 1595
+  },
+  {
+    "of_": "OF-2025-0185",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1536,
+    "qte_totale": 1701
+  },
+  {
+    "of_": "OF-2025-0186",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 994,
+    "qte_totale": 1232
+  },
+  {
+    "of_": "OF-2025-0187",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1385,
+    "qte_totale": 1399
+  },
+  {
+    "of_": "OF-2025-0188",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1454,
+    "qte_totale": 1537
+  },
+  {
+    "of_": "OF-2025-0189",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 487,
+    "qte_totale": 519
+  },
+  {
+    "of_": "OF-2025-0190",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1501,
+    "qte_totale": 1629
+  },
+  {
+    "of_": "OF-2025-0191",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 81,
+    "qte_totale": 100
+  },
+  {
+    "of_": "OF-2025-0192",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 87,
+    "qte_totale": 100
+  },
+  {
+    "of_": "OF-2025-0193",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 494,
+    "qte_totale": 541
+  },
+  {
+    "of_": "OF-2025-0194",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 1240,
+    "qte_totale": 1501
+  },
+  {
+    "of_": "OF-2025-0195",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 814,
+    "qte_totale": 912
+  },
+  {
+    "of_": "OF-2025-0196",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1258,
+    "qte_totale": 1393
+  },
+  {
+    "of_": "OF-2025-0197",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 148,
+    "qte_totale": 172
+  },
+  {
+    "of_": "OF-2025-0198",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 998,
+    "qte_totale": 1056
+  },
+  {
+    "of_": "OF-2025-0199",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 266,
+    "qte_totale": 328
+  },
+  {
+    "of_": "OF-2025-0200",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 838,
+    "qte_totale": 912
+  },
+  {
+    "of_": "OF-2025-0201",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 281,
+    "qte_totale": 334
+  },
+  {
+    "of_": "OF-2025-0202",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 286,
+    "qte_totale": 333
+  },
+  {
+    "of_": "OF-2025-0203",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 197,
+    "qte_totale": 233
+  },
+  {
+    "of_": "OF-2025-0204",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1216,
+    "qte_totale": 1257
+  },
+  {
+    "of_": "OF-2025-0205",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 557,
+    "qte_totale": 655
+  },
+  {
+    "of_": "OF-2025-0206",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 988,
+    "qte_totale": 1014
+  },
+  {
+    "of_": "OF-2025-0207",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 1471,
+    "qte_totale": 1637
+  },
+  {
+    "of_": "OF-2025-0208",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 466,
+    "qte_totale": 488
+  },
+  {
+    "of_": "OF-2025-0209",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 202,
+    "qte_totale": 219
+  },
+  {
+    "of_": "OF-2025-0210",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1734,
+    "qte_totale": 1974
+  },
+  {
+    "of_": "OF-2025-0211",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 237,
+    "qte_totale": 292
+  },
+  {
+    "of_": "OF-2025-0212",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 1312,
+    "qte_totale": 1446
+  },
+  {
+    "of_": "OF-2025-0213",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 1406,
+    "qte_totale": 1603
+  },
+  {
+    "of_": "OF-2025-0214",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1625,
+    "qte_totale": 1723
+  },
+  {
+    "of_": "OF-2025-0215",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 427,
+    "qte_totale": 522
+  },
+  {
+    "of_": "OF-2025-0216",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 628,
+    "qte_totale": 664
+  },
+  {
+    "of_": "OF-2025-0217",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 321,
+    "qte_totale": 384
+  },
+  {
+    "of_": "OF-2025-0218",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 637,
+    "qte_totale": 723
+  },
+  {
+    "of_": "OF-2025-0219",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 823,
+    "qte_totale": 905
+  },
+  {
+    "of_": "OF-2025-0220",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 204,
+    "qte_totale": 228
+  },
+  {
+    "of_": "OF-2025-0221",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 915,
+    "qte_totale": 977
+  },
+  {
+    "of_": "OF-2025-0222",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 992,
+    "qte_totale": 1222
+  },
+  {
+    "of_": "OF-2025-0223",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 356,
+    "qte_totale": 360
+  },
+  {
+    "of_": "OF-2025-0224",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 361,
+    "qte_totale": 369
+  },
+  {
+    "of_": "OF-2025-0225",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1439,
+    "qte_totale": 1758
+  },
+  {
+    "of_": "OF-2025-0226",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1307,
+    "qte_totale": 1326
+  },
+  {
+    "of_": "OF-2025-0227",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 405,
+    "qte_totale": 415
+  },
+  {
+    "of_": "OF-2025-0228",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 1030,
+    "qte_totale": 1054
+  },
+  {
+    "of_": "OF-2025-0229",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 738,
+    "qte_totale": 876
+  },
+  {
+    "of_": "OF-2025-0230",
+    "produit": "Produit G - Serie XL",
+    "qte_produite": 118,
+    "qte_totale": 142
+  },
+  {
+    "of_": "OF-2025-0231",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 547,
+    "qte_totale": 667
+  },
+  {
+    "of_": "OF-2025-0232",
+    "produit": "Produit H - Serie Eco+",
+    "qte_produite": 929,
+    "qte_totale": 1023
+  },
+  {
+    "of_": "OF-2025-0233",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 427,
+    "qte_totale": 435
+  },
+  {
+    "of_": "OF-2025-0234",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1293,
+    "qte_totale": 1610
+  },
+  {
+    "of_": "OF-2025-0235",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 699,
+    "qte_totale": 811
+  },
+  {
+    "of_": "OF-2025-0236",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 341,
+    "qte_totale": 376
+  },
+  {
+    "of_": "OF-2025-0237",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 852,
+    "qte_totale": 886
+  },
+  {
+    "of_": "OF-2025-0238",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 1340,
+    "qte_totale": 1580
+  },
+  {
+    "of_": "OF-2025-0239",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 1779,
+    "qte_totale": 1847
+  },
+  {
+    "of_": "OF-2025-0240",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 692,
+    "qte_totale": 822
+  },
+  {
+    "of_": "OF-2025-0241",
+    "produit": "Produit A - Serie Standard",
+    "qte_produite": 385,
+    "qte_totale": 441
+  },
+  {
+    "of_": "OF-2025-0242",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1045,
+    "qte_totale": 1148
+  },
+  {
+    "of_": "OF-2025-0243",
+    "produit": "Produit F - Serie Compact",
+    "qte_produite": 1345,
+    "qte_totale": 1459
+  },
+  {
+    "of_": "OF-2025-0244",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1034,
+    "qte_totale": 1048
+  },
+  {
+    "of_": "OF-2025-0245",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1489,
+    "qte_totale": 1603
+  },
+  {
+    "of_": "OF-2025-0246",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 1238,
+    "qte_totale": 1282
+  },
+  {
+    "of_": "OF-2025-0247",
+    "produit": "Produit B - Serie Premium",
+    "qte_produite": 1463,
+    "qte_totale": 1705
+  },
+  {
+    "of_": "OF-2025-0248",
+    "produit": "Produit D - Edition Limitee",
+    "qte_produite": 662,
+    "qte_totale": 710
+  },
+  {
+    "of_": "OF-2025-0249",
+    "produit": "Produit E - Serie Pro",
+    "qte_produite": 1665,
+    "qte_totale": 1857
+  },
+  {
+    "of_": "OF-2025-0250",
+    "produit": "Produit C - Serie Economique",
+    "qte_produite": 525,
+    "qte_totale": 645
   }
 ]

@@ -282,6 +282,58 @@ def insert_equipment_tags(cursor, equipment_tags_data, equipment_id_mapping, tag
     print(f"{len(equipment_tags_data)} associations traitées")
 
 
+def insert_historian(cursor, historian_data, tag_id_mapping):
+    """Insert historical sensor data into Historian table using tag id mapping"""
+    if not historian_data:
+        return
+
+    print(f"\nInsertion des données Historian ({len(historian_data):,} enregistrements)...")
+    print("Cette opération peut prendre plusieurs minutes...")
+
+    batch_size = 1000
+    total_inserted = 0
+    last_percent = 0
+
+    for i in range(0, len(historian_data), batch_size):
+        batch = historian_data[i:i + batch_size]
+
+        try:
+            # Préparer les valeurs pour insertion en batch
+            values = []
+            for entry in batch:
+                json_tag_id = entry.get('tag_name')
+                real_tag_id = tag_id_mapping.get(json_tag_id)
+
+                if real_tag_id is None:
+                    continue
+
+                values.append((
+                    entry.get('timestamp_'),
+                    entry.get('value_'),
+                    real_tag_id
+                ))
+
+            # Insertion en batch pour améliorer les performances
+            if values:
+                cursor.executemany(
+                    '''INSERT INTO "Historian" (timestamp_, value_, tag_name)
+                       VALUES (%s, %s, %s) ON CONFLICT DO NOTHING''',
+                    values
+                )
+                total_inserted += len(values)
+
+            # Afficher la progression
+            percent = int(((i + batch_size) / len(historian_data)) * 100)
+            if percent != last_percent and percent % 10 == 0:
+                print(f"  Progression: {percent}% ({total_inserted:,}/{len(historian_data):,})")
+                last_percent = percent
+
+        except Exception as e:
+            print(f"Erreur lors de l'insertion du batch {i}-{i+batch_size}: {e}")
+
+    print(f"{total_inserted:,} enregistrements Historian insérés")
+
+
 def main():
     """Fonction principale"""
     print("=" * 60)
@@ -317,6 +369,7 @@ def main():
     ofs_data = load_json_file(config_dir / 'ofs.json')
     lines_data = load_json_file(config_dir / 'lines.json')
     equipment_tags_data = load_json_file(config_dir / 'equipment_tags.json')
+    historian_data = load_json_file(config_dir / 'historian.json')
 
     # Connexion et insertion
     try:
@@ -344,6 +397,7 @@ def main():
         of_id_mapping = insert_ofs(cursor, ofs_data)
         insert_lines(cursor, lines_data, equipment_id_mapping, of_id_mapping)
         insert_equipment_tags(cursor, equipment_tags_data, equipment_id_mapping, tag_id_mapping)
+        insert_historian(cursor, historian_data, tag_id_mapping)
 
         # Commit des changements
         conn.commit()
