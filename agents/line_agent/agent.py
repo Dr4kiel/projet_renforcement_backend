@@ -3,7 +3,7 @@
 import logging
 import random
 import threading
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from line_agent.config import AgentConfig, DatabaseConfig
 from line_agent.database.connection import create_connection
@@ -113,7 +113,7 @@ class LineAgent:
 
     def _tick_sensors(self) -> list[SensorReading]:
         """Génère une lecture pour chaque capteur."""
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         readings = []
 
         for tag_id, simulator in self._simulators.items():
