@@ -27,8 +27,14 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj
 
-      - name: Check code formatting
-        run: dotnet format services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj --verify-no-changes --verbosity diagnostic
+      - name: Auto-format code
+        run: dotnet format services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj --verbosity diagnostic
+
+      - name: Commit formatting changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style: auto-format code with dotnet format"
+          file_pattern: "services/backoffice/**/*.cs"
 
       - name: Run code analysis
         run: dotnet build services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj --no-restore --configuration Release /p:TreatWarningsAsErrors=true /p:EnforceCodeStyleInBuild=true
