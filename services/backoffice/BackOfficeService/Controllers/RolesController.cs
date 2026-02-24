@@ -9,7 +9,7 @@ namespace server.Controllers;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class RolesController : ControllerBase
 {
     private readonly IRoleService _roleService;
@@ -40,7 +40,9 @@ public class RolesController : ControllerBase
     {
         var role = await _roleService.GetRoleByIdAsync(id);
         if (role == null)
+        {
             return NotFound(new { message = $"Role with ID {id} not found" });
+        }
 
         return Ok(role);
     }
@@ -54,7 +56,9 @@ public class RolesController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateRoleRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
@@ -77,13 +81,17 @@ public class RolesController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] UpdateRoleRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
             var role = await _roleService.UpdateRoleAsync(id, request);
             if (role == null)
+            {
                 return NotFound(new { message = $"Role with ID {id} not found" });
+            }
 
             return Ok(role);
         }
@@ -106,7 +114,9 @@ public class RolesController : ControllerBase
         {
             var result = await _roleService.DeleteRoleAsync(id);
             if (!result)
+            {
                 return NotFound(new { message = $"Role with ID {id} not found" });
+            }
 
             return NoContent();
         }

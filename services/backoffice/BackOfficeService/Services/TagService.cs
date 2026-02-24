@@ -30,7 +30,9 @@ public class TagService : ITagService
     {
         // Validate tag name uniqueness
         if (await _tagRepository.TagNameExistsAsync(request.TagName))
+        {
             throw new InvalidOperationException("Tag name already exists");
+        }
 
         var tag = new Tag
         {
@@ -45,13 +47,19 @@ public class TagService : ITagService
     public async Task<TagDto?> UpdateTagAsync(int id, UpdateTagRequestDto request)
     {
         var tag = await _tagRepository.GetByIdAsync(id);
-        if (tag == null) return null;
+        if (tag == null)
+        {
+            return null;
+        }
 
         // Validate tag name uniqueness if changed
         if (request.TagName != null && request.TagName != tag.TagName)
         {
             if (await _tagRepository.TagNameExistsAsync(request.TagName, id))
+            {
                 throw new InvalidOperationException("Tag name already exists");
+            }
+
             tag.TagName = request.TagName;
         }
 
@@ -64,7 +72,9 @@ public class TagService : ITagService
     {
         // Check if tag has associated historians
         if (await _tagRepository.HasHistoriansAsync(id))
+        {
             throw new InvalidOperationException("Cannot delete tag that has associated historian data");
+        }
 
         return await _tagRepository.DeleteAsync(id);
     }

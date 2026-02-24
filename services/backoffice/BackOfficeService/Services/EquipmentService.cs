@@ -32,7 +32,9 @@ public class EquipmentService : IEquipmentService
     {
         // Validate name uniqueness
         if (await _equipmentRepository.NameExistsAsync(request.Name))
+        {
             throw new InvalidOperationException("Equipment name already exists");
+        }
 
         var equipment = new Equipment
         {
@@ -44,7 +46,9 @@ public class EquipmentService : IEquipmentService
         {
             var tags = await _tagRepository.GetByIdsAsync(request.TagIds);
             if (tags.Count() != request.TagIds.Count)
+            {
                 throw new InvalidOperationException("One or more tags not found");
+            }
 
             equipment.Tags = tags.ToList();
         }
@@ -57,13 +61,19 @@ public class EquipmentService : IEquipmentService
     public async Task<EquipmentDto?> UpdateEquipmentAsync(int id, UpdateEquipmentRequestDto request)
     {
         var equipment = await _equipmentRepository.GetByIdWithRelationsAsync(id);
-        if (equipment == null) return null;
+        if (equipment == null)
+        {
+            return null;
+        }
 
         // Validate name uniqueness if changed
         if (request.Name != null && request.Name != equipment.Name)
         {
             if (await _equipmentRepository.NameExistsAsync(request.Name, id))
+            {
                 throw new InvalidOperationException("Equipment name already exists");
+            }
+
             equipment.Name = request.Name;
         }
 
@@ -74,7 +84,9 @@ public class EquipmentService : IEquipmentService
             {
                 var tags = await _tagRepository.GetByIdsAsync(request.TagIds);
                 if (tags.Count() != request.TagIds.Count)
+                {
                     throw new InvalidOperationException("One or more tags not found");
+                }
 
                 equipment.Tags.Clear();
                 foreach (var tag in tags)
@@ -97,7 +109,9 @@ public class EquipmentService : IEquipmentService
     {
         // Check if equipment has an associated line
         if (await _equipmentRepository.HasLineAsync(id))
+        {
             throw new InvalidOperationException("Cannot delete equipment that has an associated line");
+        }
 
         return await _equipmentRepository.DeleteAsync(id);
     }

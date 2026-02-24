@@ -30,7 +30,9 @@ public class RoleService : IRoleService
     {
         // Validate uniqueness
         if (await _roleRepository.NameExistsAsync(request.Name))
+        {
             throw new InvalidOperationException("Role name already exists");
+        }
 
         var role = new Role
         {
@@ -44,13 +46,18 @@ public class RoleService : IRoleService
     public async Task<RoleDto?> UpdateRoleAsync(int id, UpdateRoleRequestDto request)
     {
         var role = await _roleRepository.GetByIdAsync(id);
-        if (role == null) return null;
+        if (role == null)
+        {
+            return null;
+        }
 
         // Validate name uniqueness if changed
         if (request.Name != role.Name)
         {
             if (await _roleRepository.NameExistsAsync(request.Name))
+            {
                 throw new InvalidOperationException("Role name already exists");
+            }
         }
 
         role.Name = request.Name;
@@ -64,7 +71,9 @@ public class RoleService : IRoleService
     {
         // Prevent deletion if role has users
         if (await _roleRepository.HasUsersAsync(id))
+        {
             throw new InvalidOperationException("Cannot delete role with assigned users");
+        }
 
         return await _roleRepository.DeleteAsync(id);
     }

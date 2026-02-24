@@ -42,7 +42,11 @@ public class OfRepository : GenericRepository<Of>, IOfRepository
             .Include(o => o.LinesSuivant)
             .FirstOrDefaultAsync(o => o.Id == id);
 
-        if (of == null) return false;
+        if (of == null)
+        {
+            return false;
+        }
+
         return of.LinesEnCours.Any() || of.LinesSuivant.Any();
     }
 }

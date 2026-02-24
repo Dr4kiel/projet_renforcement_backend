@@ -32,16 +32,22 @@ public class UserService : IUserService
     {
         // Validate uniqueness
         if (await _userRepository.IdentifiantExistsAsync(request.Identifiant))
+        {
             throw new InvalidOperationException("Identifiant already exists");
+        }
 
         if (await _userRepository.EmailExistsAsync(request.Email))
+        {
             throw new InvalidOperationException("Email already exists");
+        }
 
         // Validate role if provided
         if (request.RoleId.HasValue)
         {
             if (!await _roleRepository.ExistsAsync(request.RoleId.Value))
+            {
                 throw new InvalidOperationException("Role not found");
+            }
         }
 
         // Hash password
@@ -65,13 +71,19 @@ public class UserService : IUserService
     public async Task<UserDto?> UpdateUserAsync(int id, UpdateUserRequestDto request)
     {
         var user = await _userRepository.GetByIdAsync(id);
-        if (user == null) return null;
+        if (user == null)
+        {
+            return null;
+        }
 
         // Validate identifiant uniqueness if changed
         if (request.Identifiant != null && request.Identifiant != user.Identifiant)
         {
             if (await _userRepository.IdentifiantExistsAsync(request.Identifiant))
+            {
                 throw new InvalidOperationException("Identifiant already exists");
+            }
+
             user.Identifiant = request.Identifiant;
         }
 
@@ -79,7 +91,10 @@ public class UserService : IUserService
         if (request.Email != null && request.Email != user.Email)
         {
             if (await _userRepository.EmailExistsAsync(request.Email))
+            {
                 throw new InvalidOperationException("Email already exists");
+            }
+
             user.Email = request.Email;
         }
 
@@ -87,7 +102,10 @@ public class UserService : IUserService
         if (request.RoleId.HasValue)
         {
             if (!await _roleRepository.ExistsAsync(request.RoleId.Value))
+            {
                 throw new InvalidOperationException("Role not found");
+            }
+
             user.RoleId = request.RoleId;
         }
 
@@ -105,11 +123,16 @@ public class UserService : IUserService
     public async Task<bool> ChangePasswordAsync(int id, ChangePasswordRequestDto request)
     {
         var user = await _userRepository.GetByIdAsync(id);
-        if (user == null) return false;
+        if (user == null)
+        {
+            return false;
+        }
 
         // Verify current password
         if (!BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Password))
+        {
             throw new InvalidOperationException("Current password is incorrect");
+        }
 
         // Hash and update password
         user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);

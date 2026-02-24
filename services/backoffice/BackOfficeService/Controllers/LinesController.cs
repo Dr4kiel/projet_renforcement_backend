@@ -9,7 +9,7 @@ namespace server.Controllers;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class LinesController : ControllerBase
 {
     private readonly ILineService _lineService;
@@ -40,7 +40,9 @@ public class LinesController : ControllerBase
     {
         var line = await _lineService.GetLineByIdAsync(id);
         if (line == null)
+        {
             return NotFound(new { message = $"Line with ID {id} not found" });
+        }
 
         return Ok(line);
     }
@@ -54,7 +56,9 @@ public class LinesController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateLineRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
@@ -77,13 +81,17 @@ public class LinesController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] UpdateLineRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
             var line = await _lineService.UpdateLineAsync(id, request);
             if (line == null)
+            {
                 return NotFound(new { message = $"Line with ID {id} not found" });
+            }
 
             return Ok(line);
         }
@@ -103,7 +111,9 @@ public class LinesController : ControllerBase
     {
         var result = await _lineService.DeleteLineAsync(id);
         if (!result)
+        {
             return NotFound(new { message = $"Line with ID {id} not found" });
+        }
 
         return NoContent();
     }
