@@ -171,6 +171,8 @@ docker-compose up postgres pgadmin
 
 - **PostgreSQL** : `postgres` / `postgres` (base : `production_dashboard`)
 - **pgAdmin** : `admin@example.com` / `admin`
+- **Connexion site admin** : `admin` / `admin123`
+- **Connexion site viewer** : `viewer` / `admin123`
 
 ### Développement local
 
