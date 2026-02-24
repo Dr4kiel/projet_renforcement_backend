@@ -56,9 +56,21 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-// Add PostgreSQL database context
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Add database context
+// En environnement "Testing" (tests d'intégration), on utilise EF Core InMemory
+// pour éviter toute dépendance à PostgreSQL. En production et développement, Npgsql.
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    // Nom unique par défaut pour isoler les bases entre instances de WebApplicationFactory
+    var dbName = builder.Configuration["InMemoryDatabaseName"] ?? Guid.NewGuid().ToString();
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseInMemoryDatabase(dbName));
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 
 // Register Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -196,7 +208,10 @@ using (var scope = app.Services.CreateScope())
         var logger = services.GetRequiredService<ILogger<Program>>();
 
         logger.LogInformation("Applying database migrations...");
-        context.Database.Migrate();
+        if (context.Database.IsRelational())
+            context.Database.Migrate();
+        else
+            context.Database.EnsureCreated();
         logger.LogInformation("Database migrations applied successfully.");
     }
     catch (Exception ex)
@@ -235,3 +250,6 @@ app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", service = "backoffice" }));
 
 app.Run();
+
+// Nécessaire pour que WebApplicationFactory<Program> puisse référencer le type
+public partial class Program { }
