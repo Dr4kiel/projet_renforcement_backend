@@ -5,8 +5,6 @@ on:
     paths:
       - "agents/**"
   pull_request:
-    paths:
-      - "agents/**"
 
 jobs:
   lint:

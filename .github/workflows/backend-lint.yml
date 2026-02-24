@@ -7,10 +7,6 @@ on:
       - "services/realtime/**"
       - "gateway/**"
   pull_request:
-    paths:
-      - "services/backoffice/**"
-      - "services/realtime/**"
-      - "gateway/**"
 
 jobs:
   lint:
