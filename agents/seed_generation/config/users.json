@@ -1,0 +1,16 @@
+[
+  {
+    "identifiant": "admin",
+    "password": "$2y$10$eEuSHkepndFgk7eQDVTClO2VoM2WeG.ewNverDJPpc.8mT8ghdXZq",
+    "email": "admin@production.com",
+    "created_at": "2024-01-01T00:00:00",
+    "role": 1
+  },
+  {
+    "identifiant": "viewer",
+    "password": "$2y$10$eEuSHkepndFgk7eQDVTClO2VoM2WeG.ewNverDJPpc.8mT8ghdXZq",
+    "email": "viewer@production.com",
+    "created_at": "2024-01-01T00:00:00",
+    "role": 3
+  }
+]

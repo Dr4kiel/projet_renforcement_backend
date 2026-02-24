@@ -1,0 +1,38 @@
+[
+  {
+    "tag_name": "TEMP_MACHINE_ALPHA"
+  },
+  {
+    "tag_name": "SPEED_MACHINE_ALPHA"
+  },
+  {
+    "tag_name": "PRESSURE_MACHINE_ALPHA"
+  },
+  {
+    "tag_name": "VIBRATION_CONVOYEUR_ALPHA"
+  },
+  {
+    "tag_name": "TEMP_MACHINE_BETA"
+  },
+  {
+    "tag_name": "SPEED_MACHINE_BETA"
+  },
+  {
+    "tag_name": "PRESSURE_MACHINE_BETA"
+  },
+  {
+    "tag_name": "VIBRATION_CONVOYEUR_BETA"
+  },
+  {
+    "tag_name": "TEMP_MACHINE_GAMMA"
+  },
+  {
+    "tag_name": "SPEED_MACHINE_GAMMA"
+  },
+  {
+    "tag_name": "PRESSURE_MACHINE_GAMMA"
+  },
+  {
+    "tag_name": "VIBRATION_CONVOYEUR_GAMMA"
+  }
+]
