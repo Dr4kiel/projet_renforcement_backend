@@ -27,6 +27,26 @@ class AgentConfig:
     log_level: str = "INFO"
 
 
+@dataclass(frozen=True)
+class RabbitMQConfig:
+    """Configuration de connexion à RabbitMQ."""
+
+    host: str
+    port: int
+    username: str
+    password: str
+
+
+def load_rabbitmq_config() -> RabbitMQConfig:
+    """Charge la configuration RabbitMQ depuis les variables d'environnement."""
+    return RabbitMQConfig(
+        host=os.getenv("RABBITMQ_HOST", "localhost"),
+        port=int(os.getenv("RABBITMQ_PORT", "5672")),
+        username=os.getenv("RABBITMQ_USER", "guest"),
+        password=os.getenv("RABBITMQ_PASSWORD", "guest"),
+    )
+
+
 def load_database_config() -> DatabaseConfig:
     """Charge la configuration de la base de données depuis les variables d'environnement."""
     return DatabaseConfig(

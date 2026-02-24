@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { productionApi } from '../services/productionApi';
 import signalrService from '../services/signalrService';
-import type { Line, ProductionMetricsDto, ProductionOrder } from '../types/production';
+import agentControlService from '../services/agentControlService';
+import type { AgentStatus, Line, ProductionMetricsDto, ProductionOrder } from '../types/production';
 
 interface SensorData {
   pressure: number;
@@ -38,6 +39,8 @@ export const ProductionDashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSignalRConnected, setIsSignalRConnected] = useState(false);
+  const [agentStatuses, setAgentStatuses] = useState<Record<string, AgentStatus['status']>>({});
+  const [isCommandLoading, setIsCommandLoading] = useState(false);
   const previousLineIdRef = useRef<number | null>(null);
   const selectedLineIdRef = useRef<number | null>(null);
 
@@ -158,6 +161,51 @@ export const ProductionDashboardPage = () => {
       signalrService.stopConnection().then(() => setIsSignalRConnected(false));
     };
   }, []);
+
+  // Agent control SignalR connection
+  useEffect(() => {
+    const setup = async () => {
+      try {
+        await agentControlService.startConnection();
+        agentControlService.onAgentStatusUpdated((status: AgentStatus) => {
+          setAgentStatuses((prev) => ({ ...prev, [status.lineId]: status.status }));
+        });
+      } catch (err) {
+        console.warn('Agent control hub unavailable:', err);
+      }
+    };
+
+    setup();
+
+    return () => {
+      agentControlService.off('AgentStatusUpdated');
+      agentControlService.stopConnection();
+    };
+  }, []);
+
+  const handleStartLine = async () => {
+    if (selectedLineId === null || isCommandLoading) return;
+    setIsCommandLoading(true);
+    try {
+      await agentControlService.startLine(selectedLineId);
+    } catch (err) {
+      console.error('Failed to start line:', err);
+    } finally {
+      setIsCommandLoading(false);
+    }
+  };
+
+  const handleStopLine = async () => {
+    if (selectedLineId === null || isCommandLoading) return;
+    setIsCommandLoading(true);
+    try {
+      await agentControlService.stopLine(selectedLineId);
+    } catch (err) {
+      console.error('Failed to stop line:', err);
+    } finally {
+      setIsCommandLoading(false);
+    }
+  };
 
   // Subscribe/unsubscribe to line when selection changes
   useEffect(() => {
@@ -291,6 +339,59 @@ export const ProductionDashboardPage = () => {
                 ))
               )}
             </select>
+
+            {/* Agent Controls */}
+            {selectedLineId !== null && (
+              <div className="mt-4 flex items-center justify-between border-t pt-4">
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm font-medium text-gray-700">Agent :</span>
+                  {(() => {
+                    const status = agentStatuses[String(selectedLineId)];
+                    if (status === 'running')
+                      return (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                          En marche
+                        </span>
+                      );
+                    if (status === 'stopped')
+                      return (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                          <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-red-500"></span>
+                          Arrêté
+                        </span>
+                      );
+                    return (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                        <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-gray-400"></span>
+                        Inconnu
+                      </span>
+                    );
+                  })()}
+                </div>
+
+                <div className="flex space-x-2">
+                  <button
+                    onClick={handleStartLine}
+                    disabled={
+                      isCommandLoading || agentStatuses[String(selectedLineId)] === 'running'
+                    }
+                    className="px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    {isCommandLoading ? '...' : '▶ Démarrer'}
+                  </button>
+                  <button
+                    onClick={handleStopLine}
+                    disabled={
+                      isCommandLoading || agentStatuses[String(selectedLineId)] === 'stopped'
+                    }
+                    className="px-3 py-1.5 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    {isCommandLoading ? '...' : '⏹ Arrêter'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

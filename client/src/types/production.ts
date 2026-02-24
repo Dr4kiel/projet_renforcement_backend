@@ -32,6 +32,14 @@ export interface ProductionOrder {
   lineName?: string | null;
 }
 
+export interface AgentStatus {
+  lineId: string;
+  status: 'running' | 'stopped';
+  success: boolean;
+  message?: string | null;
+  timestamp: string;
+}
+
 // Response from /lines API
 export interface Line {
   id: number;

@@ -7,8 +7,10 @@ import sys
 import threading
 
 from line_agent.agent import LineAgent
-from line_agent.config import load_agent_config, load_database_config
+from line_agent.config import load_agent_config, load_database_config, load_rabbitmq_config
 from line_agent.database.connection import wait_for_database
+from line_agent.rabbitmq.consumer import RabbitMQCommandConsumer
+from line_agent.rabbitmq.publisher import RabbitMQPublisher
 
 
 def parse_args() -> argparse.Namespace:
@@ -51,6 +53,7 @@ def main() -> None:
     args = parse_args()
 
     db_config = load_database_config()
+    rabbitmq_config = load_rabbitmq_config()
     agent_config = load_agent_config(args.line_ids)
 
     if args.interval is not None:
@@ -80,6 +83,7 @@ def main() -> None:
 
     stop_event = threading.Event()
     threads: list[threading.Thread] = []
+    agents: dict[int, LineAgent] = {}
 
     def signal_handler(signum: int, _frame) -> None:
         sig_name = signal.Signals(signum).name
@@ -89,8 +93,12 @@ def main() -> None:
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
+    # Démarrage des agents de simulation (running par défaut)
     for line_id in agent_config.line_ids:
-        agent = LineAgent(line_id, db_config, agent_config, stop_event)
+        running_event = threading.Event()
+        running_event.set()  # Les agents démarrent en état "running"
+        agent = LineAgent(line_id, db_config, agent_config, stop_event, running_event)
+        agents[line_id] = agent
         thread = threading.Thread(
             target=agent.run,
             name=f"line-agent-{line_id}",
@@ -99,6 +107,25 @@ def main() -> None:
         thread.start()
         threads.append(thread)
         logger.info("Thread démarré pour ligne %d", line_id)
+
+    # Démarrage du publisher et consumer RabbitMQ
+    publisher = RabbitMQPublisher(rabbitmq_config)
+    try:
+        publisher.connect()
+        consumer = RabbitMQCommandConsumer(rabbitmq_config, agents, publisher, stop_event)
+        rabbitmq_thread = threading.Thread(
+            target=consumer.run,
+            name="rabbitmq-consumer",
+            daemon=True,
+        )
+        rabbitmq_thread.start()
+        threads.append(rabbitmq_thread)
+        logger.info("Thread RabbitMQ démarré (contrôle des agents actif)")
+    except Exception:
+        logger.warning(
+            "Impossible de se connecter à RabbitMQ - les agents tournent sans contrôle distant",
+            exc_info=True,
+        )
 
     try:
         for thread in threads:
@@ -109,6 +136,8 @@ def main() -> None:
         stop_event.set()
         for thread in threads:
             thread.join(timeout=5.0)
+    finally:
+        publisher.close()
 
     logger.info("Tous les agents arrêtés")
 

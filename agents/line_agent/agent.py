@@ -28,11 +28,13 @@ class LineAgent:
         db_config: DatabaseConfig,
         agent_config: AgentConfig,
         stop_event: threading.Event,
+        running_event: threading.Event,
     ):
         self.line_id = line_id
         self._db_config = db_config
         self._agent_config = agent_config
         self._stop_event = stop_event
+        self._running_event = running_event
         self._simulators: dict[int, BaseSimulator] = {}
         self._repo: LineAgentRepository | None = None
         self._line_info: LineInfo | None = None
@@ -49,7 +51,8 @@ class LineAgent:
             )
 
             while not self._stop_event.is_set():
-                self._tick()
+                if self._running_event.is_set():
+                    self._tick()
                 self._stop_event.wait(self._agent_config.interval_seconds)
 
         except Exception:
@@ -196,6 +199,16 @@ class LineAgent:
                 "Ligne %d - Changement terminé, pas d'OF suivant",
                 self.line_id,
             )
+
+    def pause(self) -> None:
+        """Met en pause la simulation de cette ligne."""
+        self._running_event.clear()
+        logger.info("Agent mis en pause pour ligne %d", self.line_id)
+
+    def resume(self) -> None:
+        """Reprend la simulation de cette ligne."""
+        self._running_event.set()
+        logger.info("Agent repris pour ligne %d", self.line_id)
 
     def _get_tag_name(self, tag_id: int) -> str:
         """Retourne le nom du tag pour un tag_id donné."""
