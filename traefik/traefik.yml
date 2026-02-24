@@ -1,0 +1,17 @@
+# Traefik static configuration
+
+api:
+  dashboard: true
+  insecure: true  # Dashboard accessible sans auth (dev uniquement)
+
+entryPoints:
+  web:
+    address: ":80"
+
+providers:
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true  # Rechargement auto si les fichiers changent
+
+log:
+  level: INFO
