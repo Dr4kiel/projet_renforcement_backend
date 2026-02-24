@@ -40,7 +40,9 @@ public class TagsController : ControllerBase
     {
         var tag = await _tagService.GetTagByIdAsync(id);
         if (tag == null)
+        {
             return NotFound(new { message = $"Tag with ID {id} not found" });
+        }
 
         return Ok(tag);
     }
@@ -54,7 +56,9 @@ public class TagsController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateTagRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
@@ -77,13 +81,17 @@ public class TagsController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] UpdateTagRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
             var tag = await _tagService.UpdateTagAsync(id, request);
             if (tag == null)
+            {
                 return NotFound(new { message = $"Tag with ID {id} not found" });
+            }
 
             return Ok(tag);
         }
@@ -106,7 +114,9 @@ public class TagsController : ControllerBase
         {
             var result = await _tagService.DeleteTagAsync(id);
             if (!result)
+            {
                 return NotFound(new { message = $"Tag with ID {id} not found" });
+            }
 
             return NoContent();
         }

@@ -24,11 +24,16 @@ public class AuthService : IAuthService
     {
         // Find user by identifiant
         var user = await _userRepository.GetByIdentifiantAsync(request.Identifiant);
-        if (user == null) return null;
+        if (user == null)
+        {
+            return null;
+        }
 
         // Verify password
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+        {
             return null;
+        }
 
         // Generate JWT token
         var token = GenerateJwtToken(user.Id, user.Identifiant, user.Role?.Name);

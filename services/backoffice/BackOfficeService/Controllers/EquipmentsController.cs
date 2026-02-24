@@ -40,7 +40,9 @@ public class EquipmentsController : ControllerBase
     {
         var equipment = await _equipmentService.GetEquipmentByIdAsync(id);
         if (equipment == null)
+        {
             return NotFound(new { message = $"Equipment with ID {id} not found" });
+        }
 
         return Ok(equipment);
     }
@@ -54,7 +56,9 @@ public class EquipmentsController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateEquipmentRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
@@ -77,13 +81,17 @@ public class EquipmentsController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] UpdateEquipmentRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
             var equipment = await _equipmentService.UpdateEquipmentAsync(id, request);
             if (equipment == null)
+            {
                 return NotFound(new { message = $"Equipment with ID {id} not found" });
+            }
 
             return Ok(equipment);
         }
@@ -106,7 +114,9 @@ public class EquipmentsController : ControllerBase
         {
             var result = await _equipmentService.DeleteEquipmentAsync(id);
             if (!result)
+            {
                 return NotFound(new { message = $"Equipment with ID {id} not found" });
+            }
 
             return NoContent();
         }
