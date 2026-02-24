@@ -18,6 +18,7 @@ export const RoleFormPage = () => {
     if (isEdit) {
       loadRole();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadRole = async () => {

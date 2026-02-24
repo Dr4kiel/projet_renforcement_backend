@@ -22,6 +22,7 @@ export const EquipmentFormPage = () => {
     if (isEdit) {
       loadEquipment();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadTags = async () => {
