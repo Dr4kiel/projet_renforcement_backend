@@ -27,7 +27,10 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj
 
-      - name: Auto-format code
+      - name: Auto-format code (main project)
+        run: dotnet format services/backoffice/BackOfficeService/BackOfficeService.csproj --verbosity diagnostic
+
+      - name: Auto-format code (test project)
         run: dotnet format services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj --verbosity diagnostic
 
       - name: Commit formatting changes
