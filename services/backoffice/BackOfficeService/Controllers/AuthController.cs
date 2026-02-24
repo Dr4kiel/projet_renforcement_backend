@@ -27,11 +27,15 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         var response = await _authService.LoginAsync(request);
         if (response == null)
+        {
             return Unauthorized(new { message = "Invalid credentials" });
+        }
 
         return Ok(response);
     }

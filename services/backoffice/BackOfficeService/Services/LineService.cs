@@ -37,28 +37,38 @@ public class LineService : ILineService
     {
         // Validate name uniqueness
         if (await _lineRepository.NameExistsAsync(request.Name))
+        {
             throw new InvalidOperationException("Line name already exists");
+        }
 
         // Validate equipment exists
         if (!await _equipmentRepository.ExistsAsync(request.EquipmentId))
+        {
             throw new InvalidOperationException("Equipment not found");
+        }
 
         // Validate equipment is not already used by another line (1:1 relationship)
         if (await _lineRepository.EquipmentIsUsedAsync(request.EquipmentId))
+        {
             throw new InvalidOperationException("Equipment is already assigned to another line");
+        }
 
         // Validate OF en cours if provided
         if (request.OfEnCoursId.HasValue)
         {
             if (!await _ofRepository.ExistsAsync(request.OfEnCoursId.Value))
+            {
                 throw new InvalidOperationException("OF en cours not found");
+            }
         }
 
         // Validate OF suivant if provided
         if (request.OfSuivantId.HasValue)
         {
             if (!await _ofRepository.ExistsAsync(request.OfSuivantId.Value))
+            {
                 throw new InvalidOperationException("OF suivant not found");
+            }
         }
 
         var line = new Line
@@ -79,13 +89,19 @@ public class LineService : ILineService
     public async Task<LineDto?> UpdateLineAsync(int id, UpdateLineRequestDto request)
     {
         var line = await _lineRepository.GetByIdAsync(id);
-        if (line == null) return null;
+        if (line == null)
+        {
+            return null;
+        }
 
         // Validate name uniqueness if changed
         if (request.Name != null && request.Name != line.Name)
         {
             if (await _lineRepository.NameExistsAsync(request.Name, id))
+            {
                 throw new InvalidOperationException("Line name already exists");
+            }
+
             line.Name = request.Name;
         }
 
@@ -93,10 +109,14 @@ public class LineService : ILineService
         if (request.EquipmentId.HasValue && request.EquipmentId.Value != line.EquipmentId)
         {
             if (!await _equipmentRepository.ExistsAsync(request.EquipmentId.Value))
+            {
                 throw new InvalidOperationException("Equipment not found");
+            }
 
             if (await _lineRepository.EquipmentIsUsedAsync(request.EquipmentId.Value, id))
+            {
                 throw new InvalidOperationException("Equipment is already assigned to another line");
+            }
 
             line.EquipmentId = request.EquipmentId.Value;
         }
@@ -109,7 +129,10 @@ public class LineService : ILineService
         else if (request.OfEnCoursId.HasValue)
         {
             if (!await _ofRepository.ExistsAsync(request.OfEnCoursId.Value))
+            {
                 throw new InvalidOperationException("OF en cours not found");
+            }
+
             line.OfEnCoursId = request.OfEnCoursId;
         }
 
@@ -121,16 +144,23 @@ public class LineService : ILineService
         else if (request.OfSuivantId.HasValue)
         {
             if (!await _ofRepository.ExistsAsync(request.OfSuivantId.Value))
+            {
                 throw new InvalidOperationException("OF suivant not found");
+            }
+
             line.OfSuivantId = request.OfSuivantId;
         }
 
         // Update other fields if provided
         if (request.IsChangement.HasValue)
+        {
             line.IsChangement = request.IsChangement.Value;
+        }
 
         if (request.TempsChangement.HasValue)
+        {
             line.TempsChangement = request.TempsChangement.Value;
+        }
 
         await _lineRepository.UpdateAsync(line);
         var updatedLine = await _lineRepository.GetByIdWithRelationsAsync(id);

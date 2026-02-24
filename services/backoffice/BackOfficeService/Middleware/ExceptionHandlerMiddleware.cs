@@ -43,7 +43,9 @@ public class ExceptionHandlerMiddleware
     {
         // Skip if response already has content
         if (context.Response.ContentLength > 0)
+        {
             return;
+        }
 
         var response = context.Response.StatusCode switch
         {
@@ -71,7 +73,9 @@ public class ExceptionHandlerMiddleware
 
         var response = ApiErrorResponse.InternalServerError(message);
         if (errors != null)
+        {
             response.Errors = errors;
+        }
 
         await WriteJsonResponseAsync(context, response);
     }

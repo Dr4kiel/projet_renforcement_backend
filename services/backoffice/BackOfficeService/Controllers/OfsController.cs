@@ -40,7 +40,9 @@ public class OfsController : ControllerBase
     {
         var of = await _ofService.GetOfByIdAsync(id);
         if (of == null)
+        {
             return NotFound(new { message = $"OF with ID {id} not found" });
+        }
 
         return Ok(of);
     }
@@ -54,7 +56,9 @@ public class OfsController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateOfRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
@@ -77,13 +81,17 @@ public class OfsController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] UpdateOfRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
             var of = await _ofService.UpdateOfAsync(id, request);
             if (of == null)
+            {
                 return NotFound(new { message = $"OF with ID {id} not found" });
+            }
 
             return Ok(of);
         }
@@ -106,7 +114,9 @@ public class OfsController : ControllerBase
         {
             var result = await _ofService.DeleteOfAsync(id);
             if (!result)
+            {
                 return NotFound(new { message = $"OF with ID {id} not found" });
+            }
 
             return NoContent();
         }

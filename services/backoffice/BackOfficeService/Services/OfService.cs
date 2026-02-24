@@ -30,11 +30,15 @@ public class OfService : IOfService
     {
         // Validate OF name uniqueness
         if (await _ofRepository.OfNameExistsAsync(request.Of))
+        {
             throw new InvalidOperationException("OF name already exists");
+        }
 
         // Validate QteProduite <= QteTotale
         if (request.QteProduite > request.QteTotale)
+        {
             throw new InvalidOperationException("QteProduite cannot exceed QteTotale");
+        }
 
         var of = new Of
         {
@@ -52,28 +56,42 @@ public class OfService : IOfService
     public async Task<OfDto?> UpdateOfAsync(int id, UpdateOfRequestDto request)
     {
         var of = await _ofRepository.GetByIdAsync(id);
-        if (of == null) return null;
+        if (of == null)
+        {
+            return null;
+        }
 
         // Validate OF name uniqueness if changed
         if (request.Of != null && request.Of != of.Of_)
         {
             if (await _ofRepository.OfNameExistsAsync(request.Of, id))
+            {
                 throw new InvalidOperationException("OF name already exists");
+            }
+
             of.Of_ = request.Of;
         }
 
         if (request.Produit != null)
+        {
             of.Produit = request.Produit;
+        }
 
         if (request.QteProduite.HasValue)
+        {
             of.QteProduite = request.QteProduite.Value;
+        }
 
         if (request.QteTotale.HasValue)
+        {
             of.QteTotale = request.QteTotale.Value;
+        }
 
         // Validate QteProduite <= QteTotale after updates
         if (of.QteProduite > of.QteTotale)
+        {
             throw new InvalidOperationException("QteProduite cannot exceed QteTotale");
+        }
 
         await _ofRepository.UpdateAsync(of);
         var updatedOf = await _ofRepository.GetByIdWithLinesAsync(id);
@@ -84,7 +102,9 @@ public class OfService : IOfService
     {
         // Check if OF has associated lines
         if (await _ofRepository.HasLinesAsync(id))
+        {
             throw new InvalidOperationException("Cannot delete OF that has associated lines");
+        }
 
         return await _ofRepository.DeleteAsync(id);
     }

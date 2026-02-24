@@ -40,7 +40,9 @@ public class UsersController : ControllerBase
     {
         var user = await _userService.GetUserByIdAsync(id);
         if (user == null)
+        {
             return NotFound(new { message = $"User with ID {id} not found" });
+        }
 
         return Ok(user);
     }
@@ -54,7 +56,9 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateUserRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
@@ -77,13 +81,17 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] UpdateUserRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
             var user = await _userService.UpdateUserAsync(id, request);
             if (user == null)
+            {
                 return NotFound(new { message = $"User with ID {id} not found" });
+            }
 
             return Ok(user);
         }
@@ -103,7 +111,9 @@ public class UsersController : ControllerBase
     {
         var result = await _userService.DeleteUserAsync(id);
         if (!result)
+        {
             return NotFound(new { message = $"User with ID {id} not found" });
+        }
 
         return NoContent();
     }
@@ -118,13 +128,17 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> ChangePassword(int id, [FromBody] ChangePasswordRequestDto request)
     {
         if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
+        }
 
         try
         {
             var result = await _userService.ChangePasswordAsync(id, request);
             if (!result)
+            {
                 return NotFound(new { message = $"User with ID {id} not found" });
+            }
 
             return Ok(new { message = "Password changed successfully" });
         }
