@@ -1,192 +1,198 @@
 # Projet Dashboard de Production en Temps Réel
 
-Tableau de bord de production affichant des métriques en temps réel. L'architecture repose sur des microservices ASP.NET Core communiquant via une API Gateway (YARP), un client React connecté en SignalR pour le temps réel, et des agents Python simulant des capteurs de production. Les données sont persistées dans PostgreSQL.
+Tableau de bord affichant des métriques de production en temps réel via une architecture microservices.
 
 ## Stack Technique
 
-- **Backend** : ASP.NET Core 10.0 (architecture microservices)
-- **API Gateway** : YARP (Yet Another Reverse Proxy)
-- **Frontend** : React 19 + TypeScript + Tailwind CSS 4 + Vite 7
-- **Communication temps réel** : SignalR (WebSockets)
+- **Gateway** : Traefik v3.2 — routage, ForwardAuth JWT
+- **BackOffice** : ASP.NET Core 10.0 — API REST CRUD + authentification JWT
+- **Realtime** : ASP.NET Core 10.0 + SignalR — diffusion temps réel
+- **Frontend** : React + TypeScript + Tailwind CSS (Vite)
+- **Agents** : Scripts Python simulant des capteurs de production
 - **Base de données** : PostgreSQL 16
-- **Agents** : Python (psycopg2, python-dotenv)
-- **Conteneurisation** : Docker & Docker Compose
-
-## Fonctionnalités
-
-- Affichage en temps réel des métriques de production via SignalR
-- Sélection et suivi de lignes de production
-- Historique des données de production (Historian)
-- Gestion back-office (CRUD) : utilisateurs, rôles, lignes, équipements, tags, OFs
-- Authentification JWT
-- Notifications en temps réel pour les anomalies de production
-- Simulation continue de données via agents Python
+- **Conteneurisation** : Docker + Docker Compose
 
 ## Architecture
 
 ```mermaid
-graph TD
-    Client[Client React :3000] -- HTTP / SignalR --> Gateway[API Gateway :5050]
-    Gateway -- /api/v1/** --> Backoffice[Service Back-Office :5001]
-    Gateway -- /hubs/** --> Realtime[Service Temps Réel :5002]
-    Backoffice -- Lecture / Écriture --> DB[(PostgreSQL :5432)]
-    Realtime -- Lecture --> DB
-    Agents[Agents Python] -- Écriture --> DB
-    Realtime -- SignalR Push --> Client
+flowchart TD
+    Client["🖥️ Client React<br/>:3000"]
+
+    subgraph GW["🔀 API Gateway — Traefik :5050"]
+        direction TB
+        R_public["Routeur public<br/>POST /api/v1/auth/login<br/>GET /health<br/>OPTIONS /api/v1/**"]
+        R_protected["Routeur protégé<br/>/api/v1/**"]
+        R_hubs["Routeur SignalR<br/>/hubs/**"]
+        R_health["Routeur health<br/>/realtime/health"]
+        FA["⚙️ Middleware<br/>ForwardAuth JWT"]
+        SP["⚙️ Middleware<br/>StripPrefix /realtime"]
+
+        R_protected -->|"valide le token"| FA
+        R_health --> SP
+    end
+
+    subgraph BO["⚙️ BackOffice — :5001<br/>ASP.NET Core"]
+        Auth["Auth<br/>POST /api/v1/auth/login<br/>GET /api/v1/auth/validate"]
+        CRUD["CRUD<br/>/api/v1/lines<br/>/api/v1/users<br/>/api/v1/tags<br/>..."]
+    end
+
+    subgraph RT["📡 Realtime — :5002<br/>ASP.NET Core + SignalR"]
+        Hubs["Hubs<br/>/hubs/production<br/>/hubs/historian"]
+        Poll["Polling PostgreSQL<br/>toutes les 5s"]
+    end
+
+    subgraph DB_block["🗄️ PostgreSQL — :5432"]
+        DB[("production_dashboard")]
+    end
+
+    subgraph Agents["🤖 Agents Python"]
+        Seed["seed_generation<br/>one-shot"]
+        LineAgent["line_agent<br/>continu"]
+    end
+
+    Client -->|"REST"| R_public
+    Client -->|"REST + Bearer token"| R_protected
+    Client -->|"WebSocket"| R_hubs
+    Client -->|"GET"| R_health
+
+    R_public --> Auth
+    FA -->|"200 → transmis"| CRUD
+    FA -->|"401 → bloqué"| Client
+    R_hubs --> Hubs
+    SP --> RT
+
+    Auth --> DB
+    CRUD --> DB
+    Poll --> DB
+    Hubs -->|"push temps réel"| Client
+
+    Seed -->|"init"| DB
+    LineAgent -->|"métriques"| DB
 ```
 
-### Microservices
+## Fonctionnalités
 
-| Service | Port | Rôle |
-|---------|------|------|
-| **API Gateway** | 5050 | Point d'entrée unique, routage via YARP |
-| **Back-Office** | 5001 (interne) | Opérations CRUD, authentification JWT |
-| **Realtime** | 5002 (interne) | Hubs SignalR, broadcast des métriques |
+- Authentification JWT avec validation au niveau gateway (ForwardAuth)
+- Affichage en temps réel des métriques de production via SignalR
+- Sélection de la ligne de production à surveiller
+- Historique des données de production
+- Notifications en temps réel pour les anomalies
+- Simulation de données via des agents Python
 
-### Flux de données
+## Routes exposées (port 5050)
 
-1. Les **agents Python** simulent des capteurs et écrivent les données dans PostgreSQL
-2. Le **service Realtime** lit la base et diffuse les métriques en temps réel via SignalR
-3. Le **client React** se connecte aux hubs SignalR via la gateway et affiche les métriques live
-4. Le **service Back-Office** expose les API REST pour la gestion (CRUD) des entités
+| Route | Méthode | JWT | Destination |
+|---|---|---|---|
+| `/api/v1/auth/login` | POST | Non | backoffice:5001 |
+| `/health` | GET | Non | backoffice:5001 |
+| `/api/v1/**` | * | Oui (ForwardAuth) | backoffice:5001 |
+| `/hubs/**` | WS | Non* | realtime:5002 |
+| `/realtime/health` | GET | Non | realtime:5002 |
+
+*JWT géré par le RealtimeService via query parameter.
 
 ## Structure du Projet
 
 ```
-├── gateway/                    # API Gateway (YARP reverse proxy)
-│   └── ApiGateway/
+.
+├── .env                        # Variables d'environnement (gitignored)
+├── docker-compose.yml
+├── traefik/
+│   ├── traefik.yml             # Config statique Traefik (entrypoints, provider)
+│   └── dynamic/
+│       └── config.yml          # Config dynamique (routers, middlewares, services)
 ├── services/
-│   ├── backoffice/             # Service Back-Office (CRUD + Auth)
-│   │   └── BackOfficeService/
-│   │       ├── Controllers/    # Auth, Equipments, Lines, Ofs, Roles, Tags, Users
-│   │       ├── DTOs/           # Objets de transfert par entité
-│   │       ├── Models/         # Entités EF Core
-│   │       ├── Repositories/   # Accès aux données
-│   │       ├── Services/       # Logique métier
-│   │       ├── Middleware/     # Gestion des erreurs
-│   │       └── Data/           # DbContext + Migrations
-│   └── realtime/               # Service Temps Réel (SignalR)
-│       └── RealtimeService/
-│           ├── Hubs/           # ProductionMetricsHub, NotificationsHub
-│           ├── Services/       # MetricsBroadcastService
-│           ├── Models/         # Entités en lecture seule
-│           └── Data/           # RealtimeDbContext
-├── server/                     # Backend monolithique legacy (remplacé par les microservices)
-├── client/                     # Frontend React
-│   └── src/
-│       ├── pages/              # Login, Dashboard, ProductionDashboard, Backoffice (CRUD)
-│       ├── components/         # UI, Auth, Layout
-│       ├── services/           # Appels API + SignalR
-│       ├── context/            # Contextes React
-│       └── types/              # Types TypeScript
-├── agents/                     # Agents Python
-│   ├── seed_generation/        # Peuplement initial de la base (one-shot)
-│   ├── line_agent/             # Simulation continue des lignes de production
-│   └── requirements.txt
-└── docker-compose.yml
+│   ├── backoffice/             # API REST + auth JWT (ASP.NET Core :5001)
+│   └── realtime/               # SignalR hub (ASP.NET Core :5002)
+├── client/                     # Frontend React + TypeScript + Tailwind
+└── agents/                     # Scripts Python de simulation
+    ├── seed_generation/        # Seeding initial de la BDD (one-shot)
+    └── line_agent/             # Simulation continue des lignes de production
 ```
 
-## Schéma de Base de Données
+## Démarrage
 
-```mermaid
-erDiagram
-    Roles ||--o{ Users : "1:N"
-    Roles {
-        int role_id PK
-        varchar name
-    }
-    Users {
-        int user_id PK
-        varchar identifiant UK
-        varchar password
-        varchar email
-        int role FK
-        timestamp created_at
-        timestamp updated_at
-    }
-    Equipments ||--|| Lines : "1:1"
-    Equipments ||--o{ Equipment_Tag : "M:N"
-    Equipments {
-        int equipment_id PK
-        varchar name
-    }
-    Tags ||--o{ Equipment_Tag : "M:N"
-    Tags ||--o{ Historian : "1:N"
-    Tags {
-        int tag_id PK
-        varchar tag_name
-    }
-    Equipment_Tag {
-        int equipment FK
-        int tag_name FK
-    }
-    ofs ||--o{ Lines : "of_en_cours"
-    ofs ||--o{ Lines : "of_suivant"
-    ofs {
-        int of_id PK
-        varchar of_name
-        varchar produit
-        int qte_produite
-        int qte_totale
-    }
-    Lines {
-        int line_id PK
-        varchar name
-        int equipment FK
-        int of_en_cours FK
-        int of_suivant FK
-        bool is_changement
-        int temps_changement
-    }
-    Historian {
-        int historian_id PK
-        int tag_name FK
-        timestamp timestamp
-        decimal value
-    }
-```
+### Prérequis
 
-## Instructions de Déploiement
+- Docker + Docker Compose
 
-### Avec Docker (recommandé)
+### Configuration
 
 ```bash
-# Lancer l'ensemble des services
+# Copier et adapter le fichier d'environnement
+cp .env.example .env  # puis éditer JWT_SECRET_KEY, mots de passe, etc.
+```
+
+Variables clés dans `.env` :
+
+| Variable | Description |
+|---|---|
+| `POSTGRES_PASSWORD` | Mot de passe PostgreSQL |
+| `JWT_SECRET_KEY` | Clé secrète de signature JWT (min. 32 caractères) |
+| `CORS_ALLOWED_ORIGINS` | Origines autorisées (ex: `http://localhost:3000`) |
+| `GATEWAY_PORT` | Port d'écoute de Traefik (défaut: `5050`) |
+
+### Lancement
+
+```bash
+# Tout démarrer
 docker-compose up --build
 
-# Lancer uniquement la base de données
+# Services seuls (dev)
+docker-compose up --build gateway backoffice realtime
+
+# Base de données uniquement
 docker-compose up postgres pgadmin
 ```
 
 ### Accès
 
 | Service | URL |
-|---------|-----|
-| Frontend | http://localhost:3000 |
-| API Gateway | http://localhost:5050 |
+|---|---|
+| API / Frontend | http://localhost:5050 |
+| Dashboard Traefik | http://localhost:5051 |
 | pgAdmin | http://localhost:8080 |
-| PostgreSQL | localhost:5432 |
+| Frontend (direct) | http://localhost:3000 |
 
-### Identifiants par défaut
+## Schéma de Base de Données
+
+| Table | Colonnes principales |
+|---|---|
+| `"Users"` | id, username, password_hash, role, created_at |
+| `"Roles"` | role_id, name |
+| `"Lines"` | id, name, equipment, of_en_cours, of_suivant, is_changement |
+| `"Equipments"` | id, name |
+| `"Tags"` | tag_id, name, unit |
+| `"Historian"` | id, tag_name (FK Tags), timestamp, value |
+| `"Equipment_Tag"` | equipment (FK), tag_name (FK) |
+| `ofs` | id, name, quantity |
+
 
 - **PostgreSQL** : `postgres` / `postgres` (base : `production_dashboard`)
 - **pgAdmin** : `admin@example.com` / `admin`
 - **Connexion site admin** : `admin` / `admin123`
 - **Connexion site viewer** : `viewer` / `admin123`
 
-### Développement local
+## Développement local (sans Docker)
 
 ```bash
-# Backend (depuis services/backoffice/BackOfficeService ou services/realtime/RealtimeService)
-dotnet restore && dotnet run
+# BackOffice
+cd services/backoffice
+dotnet run
+
+# Realtime
+cd services/realtime
+dotnet run
 
 # Frontend
-cd client && npm install && npm run dev    # http://localhost:5173
+cd client
+npm install && npm run dev
 
 # Agents
-cd agents && pip install -r requirements.txt
-python -m seed_generation                   # Peuplement initial
-python -m line_agent --line-ids 1 2         # Simulation continue
+cd agents
+pip install -r requirements.txt
+python -m seed_generation   # seeding initial
+python -m line_agent        # simulation continue
 ```
 
 ## Auteurs
