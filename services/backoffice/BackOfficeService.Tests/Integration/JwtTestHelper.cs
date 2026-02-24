@@ -28,7 +28,9 @@ public static class JwtTestHelper
         };
 
         if (!string.IsNullOrEmpty(role))
+        {
             claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

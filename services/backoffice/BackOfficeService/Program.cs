@@ -209,9 +209,14 @@ using (var scope = app.Services.CreateScope())
 
         logger.LogInformation("Applying database migrations...");
         if (context.Database.IsRelational())
+        {
             context.Database.Migrate();
+        }
         else
+        {
             context.Database.EnsureCreated();
+        }
+
         logger.LogInformation("Database migrations applied successfully.");
     }
     catch (Exception ex)
