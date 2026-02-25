@@ -175,28 +175,6 @@ docker-compose up postgres pgadmin
 | `ofs` | id, name, quantity |
 
 
-## Développement local (sans Docker)
-
-```bash
-# BackOffice
-cd services/backoffice
-dotnet run
-
-# Realtime
-cd services/realtime
-dotnet run
-
-# Frontend
-cd client
-npm install && npm run dev
-
-# Agents
-cd agents
-pip install -r requirements.txt
-python -m seed_generation   # seeding initial
-python -m line_agent        # simulation continue
-```
-
 ## Auteurs
 
 - Cyprien.G
