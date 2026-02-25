@@ -18,6 +18,7 @@ export const TagFormPage = () => {
     if (isEdit) {
       loadTag();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadTag = async () => {

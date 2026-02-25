@@ -7,15 +7,15 @@ import json
 import os
 import sys
 import time
-from pathlib import Path
-import psycopg2
-from psycopg2 import sql
 from datetime import datetime
+from pathlib import Path
+
+import psycopg2
 
 
 def wait_for_db(host, port, database, user, password, max_retries=30):
     """Attend que PostgreSQL soit prêt"""
-    for i in range(max_retries):
+    for _i in range(max_retries):
         try:
             conn = psycopg2.connect(
                 host=host,
@@ -52,7 +52,7 @@ def load_json_file(filepath):
             print(f"Fichier {filepath} non trouvé, utilisation d'une liste vide")
             return []
 
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding='utf-8') as f:
             data = json.load(f)
             print(f"{filepath}: {len(data)} enregistrements chargés")
             return data
@@ -297,7 +297,7 @@ def main():
         'password': os.getenv('DB_PASSWORD', 'postgres')
     }
 
-    print(f"\nConfiguration:")
+    print("\nConfiguration:")
     print(f"  Host: {db_config['host']}")
     print(f"  Port: {db_config['port']}")
     print(f"  Database: {db_config['database']}")

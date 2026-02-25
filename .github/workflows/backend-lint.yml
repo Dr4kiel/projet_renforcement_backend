@@ -1,0 +1,33 @@
+name: Backend Linting
+
+on:
+  push:
+    paths:
+      - "services/backoffice/**"
+      - "services/realtime/**"
+      - "gateway/**"
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Lint BackOffice
+        if: hashFiles('services/backoffice/**') != ''
+        run: dotnet format services/backoffice/BackOfficeService/BackOfficeService.csproj --verify-no-changes
+
+      - name: Lint Realtime
+        if: hashFiles('services/realtime/**') != ''
+        run: dotnet format services/realtime/RealtimeService/RealtimeService.csproj --verify-no-changes
+
+      - name: Lint Gateway
+        if: hashFiles('gateway/**') != ''
+        run: dotnet format gateway/ApiGateway/ApiGateway.csproj --verify-no-changes

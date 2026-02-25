@@ -4,13 +4,21 @@ Tableau de bord de production affichant des métriques en temps réel. L'archite
 
 ## Stack Technique
 
+### Core
 - **Backend** : ASP.NET Core 10.0 (architecture microservices)
-- **API Gateway** : YARP (Yet Another Reverse Proxy)
+- **API Gateway** : Traefik v3.2 (reverse proxy, load balancer)
 - **Frontend** : React 19 + TypeScript + Tailwind CSS 4 + Vite 7
 - **Communication temps réel** : SignalR (WebSockets)
 - **Base de données** : PostgreSQL 16
-- **Agents** : Python (psycopg2, python-dotenv)
+- **Agents** : Python 3.11+ (psycopg2, python-dotenv)
 - **Conteneurisation** : Docker & Docker Compose
+
+### CI/CD & Qualité
+- **Linters** : dotnet format, ESLint, Ruff, Black
+- **Type Checking** : TypeScript, MyPy
+- **Sécurité** : CodeQL, Gitleaks, Trivy
+- **Automatisation** : GitHub Actions, Dependabot
+- **Monitoring** : Grafana (optionnel), Traefik Dashboard
 
 ## Fonctionnalités
 
@@ -160,17 +168,22 @@ docker-compose up postgres pgadmin
 
 ### Accès
 
-| Service | URL |
-|---------|-----|
-| Frontend | http://localhost:3000 |
-| API Gateway | http://localhost:5050 |
-| pgAdmin | http://localhost:8080 |
-| PostgreSQL | localhost:5432 |
+| Service | URL | Description |
+|---------|-----|-------------|
+| **Frontend** | http://localhost:3000 | Application React principale |
+| **API Gateway** | http://localhost:5050 | Point d'entrée unique (Traefik) |
+| **Traefik Dashboard** | http://localhost:8081 | Monitoring de l'API Gateway |
+| **Grafana** | http://localhost:3001 | Dashboards de visualisation (si configuré) |
+| **pgAdmin** | http://localhost:8080 | Interface de gestion PostgreSQL |
+| **PostgreSQL** | localhost:5432 | Base de données |
+
+**Note** : Les ports peuvent varier selon votre fichier `.env`
 
 ### Identifiants par défaut
 
 - **PostgreSQL** : `postgres` / `postgres` (base : `production_dashboard`)
 - **pgAdmin** : `admin@example.com` / `admin`
+- **Grafana** (si configuré) : `admin` / `admin`
 - **Connexion site admin** : `admin` / `admin123`
 - **Connexion site viewer** : `viewer` / `admin123`
 
@@ -187,6 +200,38 @@ cd client && npm install && npm run dev    # http://localhost:5173
 cd agents && pip install -r requirements.txt
 python -m seed_generation                   # Peuplement initial
 python -m line_agent --line-ids 1 2         # Simulation continue
+```
+
+## CI/CD - Pipelines
+
+Le projet utilise GitHub Actions pour garantir la qualité du code.
+
+### Linters
+
+| Technologie | Outil | Pipeline | Déclenchement |
+|-------------|-------|----------|---------------|
+| **Backend .NET** | dotnet format | `backend-lint.yml` | Push/PR sur `services/`, `gateway/` |
+| **Frontend React** | ESLint | `frontend-lint.yml` | Push/PR sur `client/` |
+| **Python Agents** | Ruff | `python-lint.yml` | Push/PR sur `agents/` |
+
+### Tests
+
+| Projet | Pipeline | Déclenchement |
+|--------|----------|---------------|
+| **BackOffice Tests** | `backoffice-unittests.yml` | Push/PR sur `services/backoffice/` |
+
+### Exécuter localement
+
+```bash
+# Linters
+dotnet format services/backoffice/BackOfficeService/BackOfficeService.csproj --verify-no-changes
+dotnet format services/realtime/RealtimeService/RealtimeService.csproj --verify-no-changes
+dotnet format gateway/ApiGateway/ApiGateway.csproj --verify-no-changes
+cd client && npm run lint
+cd agents && ruff check .
+
+# Tests
+dotnet test services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj
 ```
 
 ## Auteurs
