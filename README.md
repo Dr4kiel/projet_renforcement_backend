@@ -1,6 +1,22 @@
 # Projet Dashboard de Production en Temps Réel
 
-Tableau de bord affichant des métriques de production en temps réel via une architecture microservices.
+Ce projet est une application de monitoring de production en temps réel, conçue pour afficher les métriques clés d'une ligne de production industrielle. Il utilise une architecture moderne basée sur une API Gateway (Traefik) pour gérer les requêtes, un backend ASP.NET Core pour l'API REST et la diffusion en temps réel via SignalR, un frontend React pour l'interface utilisateur, et une base de données PostgreSQL pour stocker les données de production.
+
+## Rendu + Expériences
+
+| Branche | État | Commentaire |
+|---|---|---|
+| stable | Fonctionnel | Projet complet |
+| add_grafana | Fonctionnel | Ajout d'un container grafana avec un dashboard simple des données de prod |
+| rabbitmq | Fonctionnel | Ajout d'un container rabbitmq avec un back C# permettant de contrôler via le front, les lignes de production (marche/arrêt) |
+
+## Credentials
+
+- **PostgreSQL** : `postgres` / `postgres` (base : `production_dashboard`)
+- **pgAdmin** : `admin@example.com` / `admin`
+- **Connexion site admin** : `admin` / `admin123`
+- **Connexion site viewer** : `viewer` / `admin123`
+- **Grafana** : `admin` / `admin`
 
 ## Stack Technique
 
@@ -145,15 +161,6 @@ docker-compose up --build gateway backoffice realtime
 docker-compose up postgres pgadmin
 ```
 
-### Accès
-
-| Service | URL |
-|---|---|
-| API / Frontend | http://localhost:5050 |
-| Dashboard Traefik | http://localhost:5051 |
-| pgAdmin | http://localhost:8080 |
-| Frontend (direct) | http://localhost:3000 |
-
 ## Schéma de Base de Données
 
 | Table | Colonnes principales |
@@ -167,11 +174,6 @@ docker-compose up postgres pgadmin
 | `"Equipment_Tag"` | equipment (FK), tag_name (FK) |
 | `ofs` | id, name, quantity |
 
-
-- **PostgreSQL** : `postgres` / `postgres` (base : `production_dashboard`)
-- **pgAdmin** : `admin@example.com` / `admin`
-- **Connexion site admin** : `admin` / `admin123`
-- **Connexion site viewer** : `viewer` / `admin123`
 
 ## Développement local (sans Docker)
 
