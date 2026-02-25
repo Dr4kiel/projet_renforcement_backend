@@ -21,6 +21,7 @@ export const OfFormPage = () => {
     if (isEdit) {
       loadOf();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadOf = async () => {

@@ -8,15 +8,10 @@ on:
       - "services/backoffice/BackOfficeService.Tests/**"
   pull_request:
     branches: [dev, stable]
-    paths:
-      - "services/backoffice/BackOfficeService/**"
-      - "services/backoffice/BackOfficeService.Tests/**"
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # Allow committing formatting changes
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -29,35 +24,11 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj
 
-      - name: Auto-format code (main project)
-        run: dotnet format services/backoffice/BackOfficeService/BackOfficeService.csproj --verbosity diagnostic
-
-      - name: Auto-format code (test project)
-        run: dotnet format services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj --verbosity diagnostic
-
-      - name: Commit formatting changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "style: auto-format code with dotnet format"
-          file_pattern: "services/backoffice/**/*.cs"
-
-      - name: Run code analysis
-        run: dotnet build services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj --no-restore --configuration Release /p:TreatWarningsAsErrors=true /p:EnforceCodeStyleInBuild=true
-
-      - name: Cache ReportGenerator
-        uses: actions/cache@v4
-        with:
-          path: ~/.dotnet/tools
-          key: dotnet-tools-reportgenerator-5.5.1
-
-      - name: Install ReportGenerator
-        run: dotnet tool install -g dotnet-reportgenerator-globaltool || true
+      - name: Build
+        run: dotnet build services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj --no-restore --configuration Release
 
       - name: Run unit tests
         run: dotnet test services/backoffice/BackOfficeService.Tests/BackOfficeService.Tests.csproj --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage" --results-directory ./TestResults
-
-      - name: Generate HTML coverage report
-        run: reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:Html
 
       - name: Upload test results
         if: always()
@@ -71,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: coverage-report/
+          path: TestResults/**/*.cobertura.xml

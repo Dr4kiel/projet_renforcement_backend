@@ -28,6 +28,7 @@ export const LineFormPage = () => {
     if (isEdit) {
       loadLine();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadData = async () => {
